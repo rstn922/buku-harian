@@ -717,6 +717,14 @@ document.addEventListener('DOMContentLoaded', () => {
         ambientCtx.beginPath();
         ambientCtx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
         ambientCtx.fill();
+      }
+
+      requestAnimationFrame(animateAmbient);
+    }
+
+    animateAmbient();
+  }
+
   // === 7. WINDOW LIGHT SHADOWS ANIMATION SYSTEM ===
   const shadowCanvas = document.getElementById('shadow-canvas');
   if (shadowCanvas) {
