@@ -1,0 +1,1593 @@
+/* style.css - Tema Buku Kenangan Scrapbook 3D di Meja Kerja Virtual */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..900;1,300..900&family=Outfit:wght@100..900&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Caveat:wght@400..700&family=Reenie+Beanie&display=swap');
+
+:root {
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-comic: 'Comic Neue', cursive;
+  --font-handwritten: 'Caveat', cursive;
+  --font-signature: 'Reenie Beanie', cursive;
+  
+  --color-maroon: #801010;
+  --color-orange: #ff5e36;
+  --color-sand: #ffa834;
+  --color-blue: #00d2ff;
+  --color-yellow: #ffff80;
+  --color-black: #0a0a0a;
+  
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #0c0a09;
+  color: #f1f2f6;
+  overflow: hidden;
+  line-height: 1.6;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* === WELCOME INTRO SCREEN === */
+.welcome-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: rgba(12, 10, 9, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+}
+
+.welcome-screen.fade-out {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.welcome-card {
+  max-width: 580px;
+  width: 90%;
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.welcome-icon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 15px;
+  animation: floatIcon 3s infinite ease-in-out;
+}
+
+.welcome-title {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 30%, var(--color-sand) 70%, var(--color-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 5px;
+}
+
+.welcome-subtitle {
+  font-size: 1.1rem;
+  color: var(--color-sand);
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.welcome-letter-preview {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.welcome-letter-preview p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: justify;
+}
+
+.btn-open-jurnal {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 15px 35px;
+  background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-maroon) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 94, 54, 0.3);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.btn-open-jurnal:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(255, 94, 54, 0.5);
+  filter: brightness(1.1);
+}
+
+
+/* === MAIN DESK CONTAINER (Vertical Hardwood Floor Planks & Vignette) === */
+.desk-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #150f0a; /* Dark wood floor base */
+  background-image: 
+    /* Ambient Lamp Glow top-right */
+    radial-gradient(circle at 85% 20%, rgba(255, 220, 180, 0.18) 0%, rgba(0, 0, 0, 0) 65%),
+    /* Vertical Wood planks joints (every 130px) */
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.45) 0px, rgba(0, 0, 0, 0.45) 2px, transparent 2px, transparent 130px),
+    /* Alternating wood plank colors */
+    repeating-linear-gradient(90deg, rgba(16, 11, 7, 0.15) 0px, rgba(16, 11, 7, 0.15) 130px, rgba(0, 0, 0, 0) 130px, rgba(0, 0, 0, 0) 260px),
+    /* Fine wood grain lines */
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 4px),
+    /* Room vignette shading */
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02), rgba(3, 2, 1, 0.95));
+  background-size: 100% 100%, 260px 100%, 260px 100%, 100% 4px, 100% 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+}
+
+.ambient-light {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at 80% 15%, rgba(255, 225, 190, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Diagonal Warm Sunlight streaming from side window */
+.sunlight-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(255, 220, 160, 0.16) 0%,
+    rgba(255, 220, 160, 0.12) 20%,
+    rgba(0, 0, 0, 0.35) 21%,
+    rgba(0, 0, 0, 0.35) 25%,
+    rgba(255, 220, 160, 0.12) 26%,
+    rgba(255, 220, 160, 0.12) 48%,
+    rgba(0, 0, 0, 0.35) 49%,
+    rgba(0, 0, 0, 0.35) 53%,
+    rgba(255, 220, 160, 0.12) 54%,
+    rgba(255, 220, 160, 0.08) 75%,
+    transparent 80%);
+  pointer-events: none;
+  z-index: 4; /* Below active popups, overlays pages */
+  mix-blend-mode: overlay;
+}
+
+/* === WRINKLED CARPET ON THE FLOOR === */
+.carpet-floor {
+  position: absolute;
+  width: 1540px;
+  height: 1000px;
+  background-color: #5b4636; /* Warm brown-beige felt carpet */
+  /* Coarse woven texture using overlapping patterns */
+  background-image: 
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 4px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 4px),
+    radial-gradient(circle at 35% 45%, #695240 0%, #4a3729 100%);
+  background-size: 4px 4px, 4px 4px, 100% 100%;
+  
+  /* Slightly rotated for a casual, natural look */
+  transform: rotate(1.5deg);
+  
+  /* Wavy irregular edges representing natural woven carpet bounds */
+  border-radius: 50px 75px 60px 85px / 75px 60px 85px 50px;
+  
+  /* Frayed carpet fringe border */
+  border: 4px dashed rgba(255,255,255,0.04);
+  
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.45),
+    0 25px 60px rgba(0, 0, 0, 0.35);
+  z-index: 1;
+  pointer-events: auto; /* Allow children polaroids, cards to be clicked */
+}
+
+/* Simulated Wrinkles/Creases on the Carpet */
+.carpet-floor::before {
+  content: '';
+  position: absolute;
+  top: 15%; left: 10%;
+  width: 80%; height: 70%;
+  background: transparent;
+  box-shadow: 
+    inset -30px 25px 45px -25px rgba(0, 0, 0, 0.3),
+    inset 25px -25px 45px -25px rgba(255, 255, 255, 0.04);
+  filter: blur(6px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.carpet-floor::after {
+  content: '';
+  position: absolute;
+  bottom: 10%; right: 15%;
+  width: 60%; height: 50%;
+  background: transparent;
+  box-shadow: 
+    inset 35px -20px 40px -25px rgba(0, 0, 0, 0.35),
+    inset -25px 25px 40px -25px rgba(255, 255, 255, 0.03);
+  filter: blur(5px);
+  border-radius: 40%;
+  pointer-events: none;
+}
+
+/* === WOODEN RECTANGULAR TABLE === */
+.wooden-table {
+  position: relative;
+  width: 1200px;
+  height: 680px;
+  background-color: #2e1e12; /* Rich dark walnut base */
+  /* Fine Walnut wood grains */
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),
+    repeating-linear-gradient(90deg, #3d2a1b 0px, #3d2a1b 50px, #26190e 50px, #26190e 100px),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 3px),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.4) 100%);
+  background-size: 100% 100%;
+  border-radius: 14px;
+  /* Thick 3D Bevel/Lip */
+  border: 10px solid #190f09;
+  box-shadow: 
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    inset 0 -2px 6px rgba(0,0,0,0.6),
+    /* 3D height extrusion on the floor */
+    0 1px 0 #3a281a,
+    0 2px 0 #312115,
+    0 3px 0 #281a10,
+    0 4px 0 #1e130b,
+    0 5px 0 #140d07,
+    0 6px 0 #0a0603,
+    /* Dark, thick soft shadow cast onto carpet and room floor below */
+    0 30px 65px rgba(0, 0, 0, 0.75),
+    0 45px 100px rgba(0, 0, 0, 0.6);
+  z-index: 3;
+  pointer-events: auto;
+  
+  /* Raise camera POV by scaling down table so every corner is visible */
+  transform: scale(0.72) translateY(-2%);
+  transform-origin: center center;
+}
+
+/* Desk Mat (Karpet Alas Meja) positioned inside the wooden table */
+.desk-mat {
+  position: absolute;
+  left: 290px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 860px;
+  height: 560px;
+  background: radial-gradient(circle, #222b22 30%, #151a15 100%); /* Forest Green Felt */
+  border-radius: 16px;
+  box-shadow: 
+    inset 0 1px 4px rgba(255, 255, 255, 0.05),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.7),
+    0 15px 35px rgba(0, 0, 0, 0.6);
+  border: 2px dashed rgba(255, 255, 255, 0.06); /* stitched border */
+  z-index: 2;
+  pointer-events: none;
+  /* Felt fabric fuzzy noise texture */
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+
+/* === COFFEE CUP WITH STEAM === */
+.coffee-cup {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 90px;
+  height: 90px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 4px 6px rgba(0, 0, 0, 0.15),
+    inset 0 -4px 6px rgba(255, 255, 255, 0.8),
+    5px 15px 25px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.coffee-cup:hover {
+  transform: scale(1.03);
+}
+
+/* Coffee Cup handle */
+.coffee-cup::after {
+  content: '';
+  position: absolute;
+  top: 25px;
+  right: -14px;
+  width: 16px;
+  height: 35px;
+  background: #ffffff;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.coffee-liquid {
+  width: 72px;
+  height: 72px;
+  background: radial-gradient(circle, #3d2314 60%, #1f110a 100%);
+  border-radius: 50%;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+/* Steam particles over coffee */
+.coffee-steam-container {
+  position: absolute;
+  top: -15px;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+}
+
+.steam-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.steam-line {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: riseSteam 4s infinite linear;
+}
+
+.line-1 { animation-delay: 0s; }
+.line-2 { animation-delay: 1.3s; stroke-width: 2; }
+.line-3 { animation-delay: 2.6s; stroke-width: 3; }
+
+@keyframes riseSteam {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+    transform: translateY(10px) scaleX(0.9);
+  }
+  30% {
+    opacity: 0.6;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+    transform: translateY(-25px) scaleX(1.3);
+  }
+}
+
+
+/* === RETRO BLUE-SILVER MP3 PLAYER === */
+.mp3-player {
+  position: absolute;
+  top: 25px;
+  left: 25px; /* corner of the table */
+  width: 110px;
+  height: 180px;
+  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #475569 100%); /* Silver metallic body */
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    /* Real D-pad height extrusion on table */
+    0 1px 0 #334155,
+    0 2px 0 #1e293b,
+    0 8px 16px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 3px solid #cbd5e1;
+}
+
+/* Blue Faceplate */
+.mp3-player::before {
+  content: '';
+  position: absolute;
+  top: 4px; left: 4px;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 70%, #1e3a8a 100%); /* Electric Blue faceplate */
+  border-radius: 14px;
+  z-index: -1;
+  box-shadow: inset 0 2px 6px rgba(255,255,255,0.25);
+}
+
+/* Backlit LCD Screen */
+.mp3-screen {
+  width: 100%;
+  height: 48px;
+  background: #020617; /* Slate dark screen */
+  border-radius: 6px;
+  border: 2px solid #64748b; /* screen bezel */
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+}
+
+.mp3-status {
+  font-family: monospace;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #00f2ff; /* cyan glow */
+  text-shadow: 0 0 4px rgba(0, 242, 255, 0.8);
+  letter-spacing: 1px;
+}
+
+.mp3-track {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #00f2ff;
+  text-shadow: 0 0 5px rgba(0, 242, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+/* Circular D-pad / clickwheel */
+.mp3-wheel {
+  position: relative;
+  width: 82px;
+  height: 82px;
+  background: radial-gradient(circle, #cbd5e1 30%, #e2e8f0 70%, #94a3b8 100%); /* Silver Wheel */
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 1px 3px rgba(255,255,255,0.8),
+    inset 0 -2px 4px rgba(0,0,0,0.25),
+    0 3px 6px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mp3-center-btn {
+  width: 32px;
+  height: 32px;
+  background: radial-gradient(circle, #f1f5f9 20%, #cbd5e1 80%);
+  border: 1px solid #94a3b8;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.2),
+    inset 0 1px 1px #fff;
+  transition: transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #334155;
+}
+
+.mp3-center-btn::before {
+  content: '▶/⏸';
+  font-size: 0.6rem;
+  color: #334155;
+  font-weight: 700;
+}
+
+.mp3-center-btn:active {
+  transform: scale(0.92);
+}
+
+/* Wheel navigations */
+.mp3-nav-indicator {
+  position: absolute;
+  font-size: 0.45rem;
+  color: #64748b;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.mp3-nav-indicator.top { top: 6px; }
+.mp3-nav-indicator.bottom { bottom: 6px; }
+.mp3-nav-indicator.left { left: 8px; }
+.mp3-nav-indicator.right { right: 8px; }
+
+
+/* === MAIN SCRAPBOOK CONTAINER === */
+.book-wrapper {
+  position: absolute;
+  left: 310px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 820px;
+  height: 520px;
+  z-index: 3;
+  filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.7));
+  transition: transform 0.8s ease-in-out;
+}
+
+/* Thick Leather Backing Cover */
+.book-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -6px; left: -6px;
+  width: calc(100% + 12px);
+  height: calc(100% + 12px);
+  background: linear-gradient(135deg, #422006, #1c0d02);
+  border-radius: 12px;
+  z-index: -1;
+  box-shadow: 
+    inset 0 2px 5px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.8),
+    0 10px 30px rgba(0, 0, 0, 0.8);
+  border: 1px solid #110802;
+}
+
+/* Book Spine / Ring Binder Visual in Center */
+.book-spine {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 15px);
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, 
+    rgba(0,0,0,0.6) 0%, 
+    rgba(255,255,255,0.08) 30%, 
+    rgba(0,0,0,0.4) 50%, 
+    rgba(255,255,255,0.08) 70%, 
+    rgba(0,0,0,0.6) 100%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Ring Bind elements */
+.book-spine::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: calc(50% - 2.5px);
+  width: 5px;
+  height: 80%;
+  /* Repeating steel binder rings */
+  background: 
+    radial-gradient(circle, #aaa 30%, #555 70%, transparent 80%) 0 0/100% 40px;
+  opacity: 0.85;
+}
+
+.book {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  background-color: #fcfbf9;
+  border-radius: 8px;
+  overflow: visible;
+}
+
+
+/* === 3D PAGE STRUCTURE === */
+.page {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.8s ease;
+  z-index: 1;
+}
+
+.front, .back {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  padding: 30px;
+  box-shadow: inset 3px 0 12px rgba(0, 0, 0, 0.07);
+  background-color: #f7f4ed; /* High quality vintage paper beige */
+  /* Real paper fibers noise texture using two grid alignments */
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.015) 1px, transparent 1px);
+  background-size: 12px 12px;
+  overflow: hidden;
+}
+
+.front {
+  z-index: 2;
+  border-radius: 0 8px 8px 0;
+}
+
+.back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  border-radius: 8px 0 0 8px;
+  box-shadow: inset -3px 0 10px rgba(0,0,0,0.05);
+}
+
+/* Flipped state */
+.page.flipped {
+  transform: rotateY(-180deg);
+}
+
+/* Add page curl look shadow */
+.page::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 25px; height: 25px;
+  background: linear-gradient(135deg, transparent 70%, rgba(0,0,0,0.08) 100%);
+  pointer-events: none;
+  z-index: 15;
+}
+
+
+/* === BOOK COVER PAGES === */
+.cover-page .front {
+  background: linear-gradient(135deg, #6b21a8, #4c1d95);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 12px 12px 0;
+  box-shadow: inset 5px 0 15px rgba(255, 255, 255, 0.1);
+  padding: 40px;
+}
+
+.cover-design {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.cover-badge {
+  font-size: 4rem;
+  animation: floatIcon 3.5s infinite ease-in-out;
+}
+
+.cover-title {
+  font-family: var(--font-heading);
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #fff 50%, var(--color-sand) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cover-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+.cover-date {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-blue);
+  font-weight: 700;
+}
+
+.cover-prompt {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 25px;
+  animation: pulsePrompt 1.5s infinite alternate;
+}
+
+@keyframes pulsePrompt {
+  0% { opacity: 0.4; }
+  100% { opacity: 0.9; }
+}
+
+/* Back of Cover: Intro Page */
+.intro-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 40px;
+  text-align: center;
+  height: 100%;
+}
+
+.intro-page h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-maroon);
+}
+
+.handwritten-text {
+  font-family: var(--font-handwritten);
+  font-size: 1.45rem;
+  line-height: 1.4;
+  color: #2b2520;
+}
+
+.signature-text {
+  font-family: var(--font-signature);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-orange);
+  margin-top: 15px;
+}
+
+
+/* === EMPTY PAGES VISUAL STYLING === */
+.page-header {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-maroon);
+  border-bottom: 2px dashed rgba(128, 16, 16, 0.15);
+  padding-bottom: 6px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Polaroid Photo Slot inside Book */
+.scrapbook-photo-slot {
+  position: relative;
+  width: 85%;
+  aspect-ratio: 1/1.1;
+  background: #ffffff;
+  margin: 10px auto;
+  border-radius: 4px;
+  padding: 15px 15px 40px 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  transform: rotate(-1.5deg);
+  transition: transform 0.3s ease;
+}
+
+.scrapbook-photo-slot:hover {
+  transform: scale(1.02) rotate(1deg);
+}
+
+.photo-placeholder-box {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f0f0f0, #e2e2e2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  border: 1px dashed rgba(0,0,0,0.15);
+  gap: 10px;
+}
+
+.photo-icon {
+  font-size: 2.2rem;
+  opacity: 0.35;
+}
+
+.photo-text {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Washi Tape (Selotip Hias) */
+.washi-tape {
+  position: absolute;
+  width: 75px;
+  height: 24px;
+  background: rgba(255, 94, 54, 0.28);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.tape-top-left {
+  top: -10px; left: -25px;
+  transform: rotate(-35deg);
+  background: rgba(255, 168, 52, 0.35);
+}
+
+.tape-top-right {
+  top: -10px; right: -25px;
+  transform: rotate(35deg);
+  background: rgba(0, 210, 255, 0.28);
+}
+
+.tape-bottom-right {
+  bottom: -8px; right: -20px;
+  transform: rotate(-25deg);
+}
+
+.tape-bottom-left {
+  bottom: -8px; left: -20px;
+  transform: rotate(25deg);
+}
+
+/* Story Text Area styled like notebook */
+.scrapbook-text-area {
+  padding: 10px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.scrapbook-text-area::-webkit-scrollbar {
+  display: none;
+}
+
+.handwritten-paragraph {
+  font-family: var(--font-handwritten);
+  font-size: 1.4rem;
+  line-height: 1.45;
+  color: #2e2824;
+}
+
+.placeholder-line {
+  opacity: 0.6;
+}
+
+.scrapbook-doodle {
+  position: absolute;
+  bottom: 20px;
+  right: 25px;
+  font-size: 1.8rem;
+  opacity: 0.2;
+}
+
+/* Farewell Page Inside Back */
+.farewell-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  padding: 30px;
+  text-align: center;
+}
+
+.farewell-page h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-maroon);
+}
+
+.back-cover-page .back {
+  background: linear-gradient(135deg, #1e1b4b, #311042);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px 0 0 12px;
+  box-shadow: inset -5px 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.back-cover-design {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+
+/* === SCATTERED DECORATIONS ON THE DESK === */
+.desk-decorations {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.scattered-polaroid {
+  position: absolute;
+  width: 100px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  padding: 6px 6px 18px 6px;
+  box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.scattered-polaroid:hover {
+  transform: scale(1.15) rotate(0deg) !important;
+  z-index: 10;
+  box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.7);
+}
+
+.polaroid-stub {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border-radius: 2px;
+}
+
+.grad-1 { background: linear-gradient(135deg, var(--color-orange), var(--color-maroon)); }
+.grad-3 { background: linear-gradient(135deg, var(--color-blue), var(--color-maroon)); }
+
+.scattered-sketch {
+  position: absolute;
+  width: 90px;
+  background: #fffae8;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
+  padding: 8px;
+  box-shadow: 4px 8px 15px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  font-family: var(--font-handwritten);
+  color: #333;
+}
+
+.scattered-sketch:hover {
+  transform: scale(1.1) rotate(2deg) !important;
+  z-index: 10;
+}
+
+.sketch-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  margin-bottom: 5px;
+}
+
+.sketch-art {
+  font-size: 1rem;
+  text-align: center;
+  padding: 5px 0;
+}
+
+
+/* === SCATTERED HOUSEHOLD DECORATIONS ON THE FLOOR === */
+.floor-polaroids {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.floor-polaroid {
+  position: absolute;
+  width: 155px;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 10px 10px 32px 10px; /* Polaroid thick bottom margin look */
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    3px 12px 28px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.floor-polaroid:hover {
+  transform: scale(1.18) rotate(0deg) !important;
+  z-index: 100 !important;
+  box-shadow: 
+    0 12px 25px rgba(0, 0, 0, 0.25),
+    10px 22px 45px rgba(0, 0, 0, 0.6);
+}
+
+.fp-photo-slot {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background: #222;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
+}
+
+.fp-photo-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.2) contrast(0.95) brightness(0.95);
+  transition: filter 0.3s ease;
+}
+
+.floor-polaroid:hover .fp-photo-slot img {
+  filter: sepia(0) contrast(1) brightness(1);
+}
+
+.fp-caption {
+  font-family: var(--font-handwritten);
+  font-size: 1.15rem;
+  color: #1c1c1c;
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+/* Floor Cushion with creases and 3D shadow */
+.floor-cushion {
+  position: absolute;
+  bottom: 8%;
+  left: 24%;
+  width: 170px;
+  height: 170px;
+  background: radial-gradient(circle at 35% 35%, #ca5432 0%, #872e15 100%); /* Terracotta color */
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 8px 15px rgba(255,255,255,0.15),
+    inset 0 -12px 25px rgba(0,0,0,0.6),
+    8px 18px 32px rgba(0, 0, 0, 0.55);
+  transform: rotate(-8deg);
+  z-index: 2;
+}
+
+.floor-cushion::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  background: #5d1d0c;
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 2px 4px rgba(0,0,0,0.8),
+    0 1px 2px rgba(255,255,255,0.15);
+}
+
+.floor-cushion::after {
+  content: '';
+  position: absolute;
+  top: 10%; left: 10%;
+  width: 80%; height: 80%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 30deg,
+    rgba(0,0,0,0.1) 35deg,
+    transparent 40deg
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Floor plant pot and detailed leaves with shadows */
+.floor-plant {
+  position: absolute;
+  top: 8%;
+  right: 22%;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.plant-pot {
+  width: 62px;
+  height: 62px;
+  background: radial-gradient(circle at 35% 35%, #e27d60 0%, #ae4f36 70%, #6e2b17 100%);
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 3px 5px rgba(255,255,255,0.2),
+    inset 0 -5px 12px rgba(0,0,0,0.75),
+    5px 10px 18px rgba(0,0,0,0.55);
+  z-index: 5;
+}
+
+.leaf {
+  position: absolute;
+  background: linear-gradient(135deg, #32964d, #004b23);
+  border-radius: 50% 0 50% 0;
+  transform-origin: bottom left;
+  filter: drop-shadow(4px 8px 8px rgba(0, 0, 0, 0.45));
+  transition: transform 0.3s ease;
+}
+
+.leaf-1 {
+  width: 92px; height: 52px;
+  bottom: 50%; left: 50%;
+  transform: rotate(0deg) scale(1.0);
+}
+.leaf-2 {
+  width: 102px; height: 62px;
+  bottom: 50%; left: 50%;
+  transform: rotate(68deg) scale(0.95);
+}
+.leaf-3 {
+  width: 86px; height: 46px;
+  bottom: 50%; left: 50%;
+  transform: rotate(142deg) scale(1.05);
+}
+.leaf-4 {
+  width: 96px; height: 56px;
+  bottom: 50%; left: 50%;
+  transform: rotate(218deg) scale(0.9);
+}
+.leaf-5 {
+  width: 82px; height: 42px;
+  bottom: 50%; left: 50%;
+  transform: rotate(288deg) scale(1.0);
+}
+
+/* Floor Magazine (Open Book) */
+.floor-magazine {
+  position: absolute;
+  bottom: 12%;
+  right: 6%;
+  width: 200px;
+  height: 140px;
+  border-radius: 4px;
+  display: flex;
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.1),
+    6px 14px 28px rgba(0,0,0,0.45);
+  transform: rotate(12deg);
+  overflow: hidden;
+  z-index: 2;
+}
+
+.magazine-page-left, .magazine-page-right {
+  width: 50%;
+  height: 100%;
+  padding: 12px;
+  position: relative;
+  background: #f4ede2;
+}
+
+.magazine-page-left {
+  border-right: 1px solid rgba(0,0,0,0.15);
+  background: linear-gradient(to right, #ebdcb7 0%, #f4ede2 90%, #dcd0bc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.magazine-page-right {
+  background: linear-gradient(to left, #ebdcb7 0%, #f4ede2 90%, #dcd0bc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mag-text {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #4a4a4a;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #5a5a5a;
+}
+
+.mag-doodle {
+  font-size: 1.6rem;
+  opacity: 0.6;
+}
+
+/* Cozy slippers */
+.floor-slippers {
+  position: absolute;
+  bottom: 42%;
+  left: 3%;
+  width: 110px;
+  height: 80px;
+  display: flex;
+  gap: 12px;
+  transform: rotate(-28deg);
+  z-index: 2;
+}
+
+.slipper {
+  width: 32px;
+  height: 70px;
+  background: radial-gradient(circle at 50% 20%, #475569 20%, #1e293b 100%);
+  border-radius: 16px 16px 8px 8px;
+  box-shadow: 
+    inset 0 3px 5px rgba(255,255,255,0.08),
+    inset 0 -5px 10px rgba(0,0,0,0.5),
+    3px 6px 14px rgba(0,0,0,0.45);
+  position: relative;
+}
+
+.slipper::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: -2px;
+  width: 36px; height: 26px;
+  background: #f1f5f9;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Headphones retro */
+.floor-headphones {
+  position: absolute;
+  top: 45%;
+  right: 3%;
+  width: 90px;
+  height: 90px;
+  transform: rotate(38deg);
+  z-index: 2;
+}
+
+.headphone-band {
+  width: 80px;
+  height: 80px;
+  border: 6px solid #1e293b;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px; left: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.headphone-cup {
+  width: 16px;
+  height: 28px;
+  background: #334155;
+  border-radius: 6px;
+  position: absolute;
+  top: 44px;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.45);
+}
+
+.cup-l { left: 0px; transform: rotate(-6deg); }
+.cup-r { right: 0px; transform: rotate(6deg); }
+
+/* Keys bundle */
+.floor-keys {
+  position: absolute;
+  bottom: 28%;
+  right: 17%;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-8deg);
+  z-index: 2;
+}
+
+.key-ring {
+  width: 25px;
+  height: 25px;
+  border: 2px solid #94a3b8;
+  border-radius: 50%;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.4);
+}
+
+.key {
+  width: 8px;
+  height: 35px;
+  background: linear-gradient(to right, #cbd5e1, #64748b);
+  position: absolute;
+  transform-origin: top center;
+  box-shadow: 1px 3px 6px rgba(0,0,0,0.35);
+}
+
+.key::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px;
+  width: 12px; height: 12px;
+  background: #334155;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+}
+
+.key-1 {
+  top: 15px; left: 10px;
+  transform: rotate(45deg);
+}
+
+.key-2 {
+  top: 15px; left: 12px;
+  transform: rotate(85deg);
+}
+
+/* Scattered Uno cards */
+.uno-card-floor {
+  position: absolute;
+  width: 46px;
+  height: 70px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 
+    0 1px 2px rgba(0,0,0,0.15),
+    3px 6px 12px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  z-index: 2;
+}
+
+.uno-card-floor:hover {
+  transform: scale(1.15) rotate(0deg) !important;
+  z-index: 10;
+}
+
+.red-card {
+  background: radial-gradient(circle, #ef4444 60%, #991b1b 100%);
+  color: #fff;
+}
+
+.blue-card {
+  background: radial-gradient(circle, #3b82f6 60%, #1e3a8a 100%);
+  color: #fff;
+}
+
+
+/* === BOOK NAVIGATION ON-DESK BUTTONS === */
+.book-navigation {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  z-index: 5;
+}
+
+.btn-nav {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 30px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-nav:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+.btn-nav:active {
+  transform: translateY(0);
+}
+
+
+/* === FIREWORKS & SECRET EFFECTS === */
+.fireworks-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease-in-out;
+}
+
+.fireworks-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#fireworks-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 1000;
+  pointer-events: none;
+  display: none;
+}
+
+
+/* Caty removed */
+
+
+/* === RESPONSIVE LAYOUT (MOBILE OPTIMIZATIONS) === */
+@media (max-width: 1240px) and (min-width: 769px) {
+  .wooden-table {
+    transform: scale(0.8);
+    transform-origin: center center;
+  }
+  .carpet-floor {
+    transform: scale(0.8) rotate(1.5deg);
+    transform-origin: center center;
+  }
+}
+
+@media (max-width: 1000px) and (min-width: 769px) {
+  .wooden-table {
+    transform: scale(0.6);
+    transform-origin: center center;
+  }
+  .carpet-floor {
+    transform: scale(0.6) rotate(1.5deg);
+    transform-origin: center center;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-card {
+    padding: 25px;
+  }
+  
+  /* Stacking Tabletop Elements */
+  .desk-container {
+    flex-direction: column;
+    padding: 10px;
+    background: radial-gradient(circle, #3d2314 0%, #0c0a09 100%);
+  }
+
+  .carpet-floor {
+    display: none !important;
+  }
+
+  .wooden-table {
+    width: 100% !important;
+    height: auto !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: block !important;
+  }
+
+  .desk-mat {
+    display: none !important;
+  }
+
+  .coffee-cup {
+    display: none !important;
+  }
+
+  .cassette-player {
+    display: none !important;
+  }
+
+  /* Transform Book to Single Page View on Mobile */
+  .book-wrapper {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+    width: 92vw !important;
+    height: 62vh !important;
+    margin: 20px auto !important;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+  }
+  
+  .book-wrapper::before {
+    top: -4px; left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    border-radius: 8px;
+  }
+
+  .book-spine {
+    display: none; /* Hide spine in single page mobile view */
+  }
+
+  .book {
+    border-radius: 6px;
+  }
+
+  .page {
+    left: 0;
+    width: 100%;
+    transform-origin: center center;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  }
+
+  /* Transition on Mobile is simple fade-out instead of 3D flip */
+  .page .front, .page .back {
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* In single page mode, we map:
+     - Unflipped page: shows front side, visible.
+     - Flipped page: shows back side, visible.
+     We hide the back when unflipped, and hide the front when flipped.
+  */
+  .page.flipped {
+    transform: none; /* No 3D flip rotation */
+  }
+
+  .page .back {
+    transform: none; /* Reset rotation */
+  }
+
+  /* Page transition logic on mobile handled by showing/hiding classes */
+  .page-mobile-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .scrapbook-photo-slot {
+    width: 90%;
+    padding: 10px 10px 30px 10px;
+  }
+
+  .book-navigation {
+    bottom: 20px;
+    gap: 10px;
+    width: 90%;
+    justify-content: center;
+  }
+
+  .btn-nav {
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  .desk-decorations {
+    display: none; /* Hide extra desk clutter on mobile */
+  }
+}

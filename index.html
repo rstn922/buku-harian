@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEMORISTIN - Jurnal Kenangan Ristin</title>
+  <meta name="description" content="Sebuah website kenang-kenangan KKN Ristin dalam bentuk scrapbook interaktif 3D di atas meja kerja virtual.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- WELCOME INTRO SCREEN (ENVELOPE/LETTER STYLE) -->
+  <div class="welcome-screen" id="welcome-screen">
+    <div class="welcome-card glass-card">
+      <span class="welcome-icon">🌅</span>
+      <h1 class="welcome-title">MEMORISTIN</h1>
+      <p class="welcome-subtitle">Jurnal Kenangan KKN Ristin</p>
+      <div class="welcome-letter-preview">
+        <p>Hai Ristin, semua kisah KKN kita yang sangat berharga... Aku kumpulkan semuanya di dalam jurnal kenangan ini. Bukalah halaman demi halaman dan hidupkan kembali hari-hari indah kita di posko.</p>
+      </div>
+      <button class="btn-open-jurnal" id="btn-open-jurnal">Buka Jurnal Kenangan 📖</button>
+    </div>
+  </div>
+
+  <!-- MAIN DESK CONTAINER (TOP-DOWN VIEW) -->
+  <div class="desk-container" id="desk-container">
+    <div class="ambient-light"></div>
+    <div class="sunlight-overlay"></div>
+
+    <!-- WRINKLED CARPET ON THE FLOOR -->
+    <div class="carpet-floor" id="carpet-floor">
+      
+      <!-- Scattered Floor Objects -->
+      <div class="floor-cushion" title="Bantal Duduk"></div>
+      
+      <div class="floor-plant" title="Tanaman Hias">
+        <div class="plant-pot"></div>
+        <div class="leaf leaf-1"></div>
+        <div class="leaf leaf-2"></div>
+        <div class="leaf leaf-3"></div>
+        <div class="leaf leaf-4"></div>
+        <div class="leaf leaf-5"></div>
+      </div>
+      
+      <div class="floor-magazine" title="Komik Favorit">
+        <div class="magazine-page-left">
+          <div class="mag-text">MEMORIES</div>
+        </div>
+        <div class="magazine-page-right">
+          <div class="mag-doodle">🌸</div>
+        </div>
+      </div>
+
+      <div class="floor-slippers" title="Sandal Rumah">
+        <div class="slipper slipper-l"></div>
+        <div class="slipper slipper-r"></div>
+      </div>
+
+      <div class="floor-headphones" title="Headphone Musik">
+        <div class="headphone-band"></div>
+        <div class="headphone-cup cup-l"></div>
+        <div class="headphone-cup cup-r"></div>
+      </div>
+
+      <div class="floor-keys" title="Kunci Posko">
+        <div class="key-ring"></div>
+        <div class="key key-1"></div>
+        <div class="key key-2"></div>
+      </div>
+
+      <!-- Messy Polaroids on the Floor -->
+      <div class="floor-polaroids">
+        <div class="floor-polaroid fp-1" style="top: 8%; left: 6%; transform: rotate(-18deg);" title="Foto Pantai">
+          <div class="fp-photo-slot">
+            <img src="assets/photos/memori-01.jpg" alt="Pantai 🌊">
+          </div>
+          <div class="fp-caption">Pantai 🌊</div>
+        </div>
+        <div class="floor-polaroid fp-2" style="top: 72%; left: 4%; transform: rotate(15deg);" title="Foto UNO">
+          <div class="fp-photo-slot">
+            <img src="assets/photos/memori-02.jpg" alt="UNO KKN 🃏">
+          </div>
+          <div class="fp-caption">UNO KKN 🃏</div>
+        </div>
+        <div class="floor-polaroid fp-3" style="top: 12%; right: 4%; transform: rotate(22deg);" title="Foto Posko">
+          <div class="fp-photo-slot">
+            <img src="assets/photos/memori-03.jpg" alt="Sarapan Pagi 🍳">
+          </div>
+          <div class="fp-caption">Sarapan Pagi 🍳</div>
+        </div>
+        <div class="floor-polaroid fp-4" style="bottom: 6%; right: 10%; transform: rotate(-25deg);" title="Foto KKN">
+          <div class="fp-photo-slot">
+            <img src="assets/photos/memori-04.jpg" alt="17 Agustus 🎸">
+          </div>
+          <div class="fp-caption">17 Agustus 🎸</div>
+        </div>
+      </div>
+      
+      <!-- Scattered UNO Cards on the Carpet -->
+      <div class="uno-cards-scattered">
+        <div class="uno-card-floor red-card" style="top: 35%; left: 2%; transform: rotate(12deg);">🔴</div>
+        <div class="uno-card-floor blue-card" style="top: 55%; right: 2%; transform: rotate(-35deg);">🔵</div>
+      </div>
+
+    </div>
+
+    <!-- WOODEN SQUARE TABLE -->
+    <div class="wooden-table" id="wooden-table">
+      
+      <!-- COFFEE CUP WITH STEAM -->
+      <div class="coffee-cup" id="coffee-cup" title="Secangkir Kopi Hangat">
+        <div class="coffee-liquid"></div>
+        <div class="coffee-steam-container">
+          <svg class="steam-svg" viewBox="0 0 100 100">
+            <path class="steam-line line-1" d="M30,80 Q40,50 30,20 T40,0" />
+            <path class="steam-line line-2" d="M50,80 Q60,50 50,20 T60,0" />
+            <path class="steam-line line-3" d="M70,80 Q60,50 70,20 T60,0" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- RETRO BLUE-SILVER MP3 PLAYER -->
+      <div class="mp3-player" id="mp3-player" title="Pemutar MP3 Retro">
+        <div class="mp3-screen">
+          <div class="mp3-status" id="mp3-status">PAUSED</div>
+          <div class="mp3-track">EVERYTHING</div>
+        </div>
+        <div class="mp3-wheel">
+          <button class="mp3-center-btn" id="mp3-play-pause" title="Putar/Jeda"></button>
+          <div class="mp3-nav-indicator top">▲</div>
+          <div class="mp3-nav-indicator bottom">▼</div>
+          <div class="mp3-nav-indicator left">◀</div>
+          <div class="mp3-nav-indicator right">▶</div>
+        </div>
+      </div>
+
+      <!-- DESK MAT (ALAS MEJA) -->
+      <div class="desk-mat"></div>
+
+      <!-- MAIN SCRAPBOOK CONTAINER -->
+      <div class="book-wrapper" id="book-wrapper">
+        <div class="book-spine"></div>
+        <div class="book" id="scrapbook">
+          
+          <!-- COVER PAGE -->
+          <div class="page cover-page" id="page-0">
+            <div class="front">
+              <div class="cover-design">
+                <div class="cover-badge">📖</div>
+                <h2 class="cover-title">MEMORISTIN</h2>
+                <p class="cover-desc">kenangan buat ristin</p>
+                <div class="cover-prompt">Klik halaman kanan untuk membuka ➔</div>
+              </div>
+            </div>
+            <div class="back">
+              <!-- Back of cover: Page 1 -->
+              <div class="page-content intro-page">
+                <h3>Jurnal Ini Milikmu</h3>
+                <p class="handwritten-text">Setiap foto menyimpan tawa, setiap baris menyimpan rindu. Jurnal ini adalah rangkuman dari momen-momen random, kerja keras, dan malam-malam berharga yang kita lalui bersama di posko KKN.</p>
+                <p class="signature-text">- I Wish I Could Turn Back Time -</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE SPREAD 1 (Page 2 & 3) -->
+          <div class="page" id="page-1">
+            <div class="front">
+              <!-- Page 2 (Left) -->
+              <div class="page-content empty-page">
+                <div class="page-header">🌅 Momen Indah</div>
+                <div class="scrapbook-photo-slot">
+                  <div class="photo-placeholder-box">
+                    <span class="photo-icon">📷</span>
+                    <p class="photo-text">Tempat Foto Memori</p>
+                  </div>
+                  <div class="washi-tape tape-top-left"></div>
+                  <div class="washi-tape tape-bottom-right"></div>
+                </div>
+              </div>
+            </div>
+            <div class="back">
+              <!-- Page 3 (Right) -->
+              <div class="page-content empty-page">
+                <div class="page-header">📖 Catatan Harian</div>
+                <div class="scrapbook-text-area">
+                  <p class="handwritten-paragraph placeholder-line">Cerita memori kosong...</p>
+                  <p class="handwritten-paragraph placeholder-line">Isi catatan dan kisah seru tentang momen ini akan berada di sini untuk dibaca kembali.</p>
+                </div>
+                <div class="scrapbook-doodle">✏️</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE SPREAD 2 (Page 4 & 5) -->
+          <div class="page" id="page-2">
+            <div class="front">
+              <!-- Page 4 -->
+              <div class="page-content empty-page">
+                <div class="page-header">🌅 Momen Indah</div>
+                <div class="scrapbook-photo-slot">
+                  <div class="photo-placeholder-box">
+                    <span class="photo-icon">📷</span>
+                    <p class="photo-text">Tempat Foto Memori</p>
+                  </div>
+                  <div class="washi-tape tape-top-right"></div>
+                  <div class="washi-tape tape-bottom-left"></div>
+                </div>
+              </div>
+            </div>
+            <div class="back">
+              <!-- Page 5 -->
+              <div class="page-content empty-page">
+                <div class="page-header">📖 Catatan Harian</div>
+                <div class="scrapbook-text-area">
+                  <p class="handwritten-paragraph placeholder-line">Cerita memori kosong...</p>
+                  <p class="handwritten-paragraph placeholder-line">Setiap halaman mencerminkan tawa dan kebersamaan kita.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE SPREAD 3 (Page 6 & 7) -->
+          <div class="page" id="page-3">
+            <div class="front">
+              <!-- Page 6 -->
+              <div class="page-content empty-page">
+                <div class="page-header">🌅 Momen Indah</div>
+                <div class="scrapbook-photo-slot">
+                  <div class="photo-placeholder-box">
+                    <span class="photo-icon">📷</span>
+                    <p class="photo-text">Tempat Foto Memori</p>
+                  </div>
+                  <div class="washi-tape tape-top-left"></div>
+                </div>
+              </div>
+            </div>
+            <div class="back">
+              <!-- Page 7 -->
+              <div class="page-content empty-page">
+                <div class="page-header">📖 Catatan Harian</div>
+                <div class="scrapbook-text-area">
+                  <p class="handwritten-paragraph placeholder-line">Cerita memori kosong...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE SPREAD 4 (Page 8 & 9) -->
+          <div class="page" id="page-4">
+            <div class="front">
+              <!-- Page 8 -->
+              <div class="page-content empty-page">
+                <div class="page-header">🌅 Momen Indah</div>
+                <div class="scrapbook-photo-slot">
+                  <div class="photo-placeholder-box">
+                    <span class="photo-icon">📷</span>
+                    <p class="photo-text">Tempat Foto Memori</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="back">
+              <!-- Page 9 -->
+              <div class="page-content empty-page">
+                <div class="page-header">📖 Catatan Harian</div>
+                <div class="scrapbook-text-area">
+                  <p class="handwritten-paragraph placeholder-line">Cerita memori kosong...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE SPREAD 5 (Page 10 & 11) -->
+          <div class="page" id="page-5">
+            <div class="front">
+              <!-- Page 10 -->
+              <div class="page-content empty-page">
+                <div class="page-header">🌅 Momen Indah</div>
+                <div class="scrapbook-photo-slot">
+                  <div class="photo-placeholder-box">
+                    <span class="photo-icon">📷</span>
+                    <p class="photo-text">Tempat Foto Memori</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="back">
+              <!-- Page 11 -->
+              <div class="page-content empty-page">
+                <div class="page-header">📖 Catatan Harian</div>
+                <div class="scrapbook-text-area">
+                  <p class="handwritten-paragraph placeholder-line">Cerita memori kosong...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BACK COVER PAGE -->
+          <div class="page back-cover-page" id="page-6">
+            <div class="front">
+              <!-- Page 12 (Inside Back Cover - Left) -->
+              <div class="page-content farewell-page">
+                <h3>Terima Kasih Ristin</h3>
+                <p class="handwritten-text">Telah hadir di hidupku dan mewarnai kisah KKN yang luar biasa asyik ini. Sampai jumpa di kisah-kisah masa depan selanjutnya!</p>
+                <div class="scrapbook-doodle">❤️</div>
+              </div>
+            </div>
+            <div class="back">
+              <!-- Back of Back Cover (Closing Back Cover Page) -->
+              <div class="cover-design back-cover-design">
+                <div class="cover-badge">🐾</div>
+                <h2 class="cover-title">MEMORISTIN</h2>
+                <p class="cover-desc">Sebuah Kenangan yang Abadi</p>
+                <p class="cover-date">© 2026 Jurnal Kenangan</p>
+                <div class="cover-prompt">Jurnal Telah Selesai Dibaca</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- NAVIGATION CONTROLS -->
+    <div class="book-navigation">
+      <button class="btn-nav" id="btn-book-prev">◀ Halaman Sebelumnya</button>
+      <button class="btn-nav" id="btn-book-next">Halaman Selanjutnya ▶</button>
+    </div>
+
+  </div>
+
+  <!-- FLOATING MINI AUDIO PLAYER (REUSED AS BACKGROUND AMBIENCE TRACKER) -->
+  <div class="floating-player-card" id="floating-player" style="display: none;">
+    <div class="floating-player-info">
+      <span class="floating-player-icon">🎵</span>
+      <div class="floating-player-text">
+        <span class="floating-player-title">EVERYTHING</span>
+        <span class="floating-player-status" id="floating-player-status">Memutar...</span>
+      </div>
+    </div>
+    <button class="btn-floating-play" id="btn-floating-play">Jeda</button>
+  </div>
+
+  <!-- SECRET FIREWORKS OVERLAY & CANVAS -->
+  <div id="fireworks-overlay" class="fireworks-overlay"></div>
+  <canvas id="fireworks-canvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
