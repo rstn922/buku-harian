@@ -585,4 +585,145 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // === 6. AMBIENT SUNLIGHT DUST PARTICLES SYSTEM ===
+  const ambientCanvas = document.getElementById('ambient-canvas');
+  if (ambientCanvas) {
+    const ambientCtx = ambientCanvas.getContext('2d');
+    let mouseX = -9999;
+    let mouseY = -9999;
+
+    function resizeAmbientCanvas() {
+      ambientCanvas.width = window.innerWidth;
+      ambientCanvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeAmbientCanvas);
+    resizeAmbientCanvas();
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+      }
+    });
+
+    window.addEventListener('mouseleave', () => {
+      mouseX = -9999;
+      mouseY = -9999;
+    });
+
+    window.addEventListener('touchend', () => {
+      mouseX = -9999;
+      mouseY = -9999;
+    });
+
+    const motes = [];
+    const moteCount = 38; // Small number of particles (30 - 45) to mimic natural dust
+
+    for (let i = 0; i < moteCount; i++) {
+      motes.push({
+        x: Math.random() * ambientCanvas.width,
+        y: Math.random() * ambientCanvas.height,
+        size: 0.8 + Math.random() * 1.6, // radius: 0.8px to 2.4px (makes glowRadius 2px to 6px)
+        vx: 0,
+        vy: 0,
+        baseVx: -0.15 + Math.random() * 0.3,
+        baseVy: 0.25 + Math.random() * 0.45,
+        swayAngle: Math.random() * Math.PI * 2,
+        swaySpeed: 0.003 + Math.random() * 0.007,
+        pulseAngle: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.004 + Math.random() * 0.01,
+        baseAlpha: 0.18 + Math.random() * 0.25 // max base alpha
+      });
+    }
+
+    function animateAmbient() {
+      ambientCtx.clearRect(0, 0, ambientCanvas.width, ambientCanvas.height);
+
+      for (let i = 0; i < motes.length; i++) {
+        const p = motes[i];
+
+        // Update cycles
+        p.swayAngle += p.swaySpeed;
+        p.pulseAngle += p.pulseSpeed;
+
+        const targetVx = p.baseVx + Math.sin(p.swayAngle) * 0.12;
+        const targetVy = p.baseVy;
+
+        const dx = mouseX - p.x;
+        const dy = mouseY - p.y;
+        const dist = Math.hypot(dx, dy);
+        const maxDist = 180; // Attraction range 180px
+
+        if (dist < maxDist && mouseX > -1000) {
+          const force = (maxDist - dist) / maxDist;
+          const strength = 0.045; // Gentle magnetic strength (weak pull)
+
+          // Weak acceleration towards mouse
+          p.vx += (dx / dist) * force * strength;
+          p.vy += (dy / dist) * force * strength;
+        }
+
+        // Apply friction
+        p.vx *= 0.97;
+        p.vy *= 0.97;
+
+        // Return to natural drift path
+        p.vx += (targetVx - p.vx) * 0.025;
+        p.vy += (targetVy - p.vy) * 0.025;
+
+        // Clamp speed to keep movement calm and nostalgic
+        const speed = Math.hypot(p.vx, p.vy);
+        const maxSpeed = 1.6;
+        if (speed > maxSpeed) {
+          p.vx = (p.vx / speed) * maxSpeed;
+          p.vy = (p.vy / speed) * maxSpeed;
+        }
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Boundary wrap
+        if (p.y > ambientCanvas.height + 15) {
+          p.y = -15;
+          p.x = Math.random() * ambientCanvas.width;
+          p.vx = p.baseVx;
+          p.vy = p.baseVy;
+        }
+        if (p.x < -15) {
+          p.x = ambientCanvas.width + 15;
+        } else if (p.x > ambientCanvas.width + 15) {
+          p.x = -15;
+        }
+
+        // Pulse alpha for ambient sparkling
+        const alpha = p.baseAlpha + Math.sin(p.pulseAngle) * 0.12;
+        const clampedAlpha = Math.max(0.08, Math.min(0.55, alpha));
+        const glowRadius = p.size * 2.5;
+
+        // Render soft glow particle
+        const grad = ambientCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
+        grad.addColorStop(0, `rgba(255, 240, 200, ${clampedAlpha})`);
+        grad.addColorStop(0.3, `rgba(253, 218, 120, ${clampedAlpha * 0.6})`);
+        grad.addColorStop(0.7, `rgba(251, 191, 36, ${clampedAlpha * 0.15})`);
+        grad.addColorStop(1, `rgba(251, 191, 36, 0)`);
+
+        ambientCtx.fillStyle = grad;
+        ambientCtx.beginPath();
+        ambientCtx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
+        ambientCtx.fill();
+      }
+
+      requestAnimationFrame(animateAmbient);
+    }
+
+    animateAmbient();
+  }
+
 });
+

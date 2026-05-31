@@ -1441,9 +1441,16 @@ body {
   display: none;
 }
 
-
-/* Caty removed */
-
+/* === AMBIENT SUNLIGHT DUST CANVAS === */
+#ambient-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 6;
+  pointer-events: none; /* Crucial: lets clicks pass through to book and buttons */
+}
 
 /* === RESPONSIVE LAYOUT (MOBILE OPTIMIZATIONS) === */
 @media (max-width: 1240px) and (min-width: 769px) {
