@@ -196,26 +196,38 @@ body {
   position: absolute;
   width: 1540px;
   height: 1000px;
-  background-color: #5b4636; /* Warm brown-beige felt carpet */
-  /* Coarse woven texture using overlapping patterns */
+  background-color: #4a3222; /* Rich warm woodsy brown felt carpet */
+  /* Coarse woven fabric base combined with a gorgeous vintage Persian/Boho geometric pattern */
   background-image: 
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 4px),
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 4px),
-    radial-gradient(circle at 35% 45%, #695240 0%, #4a3729 100%);
-  background-size: 4px 4px, 4px 4px, 100% 100%;
+    /* Moroccan/Bohemian Diamond lattice lines */
+    linear-gradient(135deg, rgba(251, 191, 36, 0.09) 25%, transparent 25%), 
+    linear-gradient(225deg, rgba(251, 191, 36, 0.09) 25%, transparent 25%), 
+    linear-gradient(45deg, rgba(251, 191, 36, 0.09) 25%, transparent 25%), 
+    linear-gradient(315deg, rgba(251, 191, 36, 0.09) 25%, transparent 25%),
+    /* Alternating warm orange & beige geometric stripes/accents */
+    linear-gradient(to right, rgba(255, 94, 54, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 94, 54, 0.07) 1px, transparent 1px),
+    /* Inner vintage grid layout for the rug texture */
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 6px),
+    /* Ambient vignette shading */
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.55) 100%);
+  background-size: 80px 80px, 80px 80px, 80px 80px, 80px 80px, 160px 160px, 160px 160px, 6px 6px, 6px 6px, 100% 100%;
   
   /* Slightly rotated for a casual, natural look */
   transform: rotate(1.5deg);
   
   /* Wavy irregular edges representing natural woven carpet bounds */
-  border-radius: 50px 75px 60px 85px / 75px 60px 85px 50px;
+  border-radius: 60px 85px 55px 90px / 85px 55px 90px 60px;
   
   /* Frayed carpet fringe border */
-  border: 4px dashed rgba(255,255,255,0.04);
+  border: 5px dashed rgba(251, 191, 36, 0.15); /* Vintage golden border */
   
   box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.45),
-    0 25px 60px rgba(0, 0, 0, 0.35);
+    inset 0 0 0 16px rgba(255, 94, 54, 0.04), /* Orange inner weave line */
+    inset 0 0 0 32px rgba(251, 191, 36, 0.02),  /* Golden inner border */
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    0 35px 80px rgba(0, 0, 0, 0.45);
   z-index: 1;
   pointer-events: auto; /* Allow children polaroids, cards to be clicked */
 }
@@ -1475,7 +1487,406 @@ body {
   }
 }
 
+/* === RETRO HOUSEHOLD MEMORY ITEMS === */
+.floor-guitar {
+  position: absolute;
+  bottom: 8%;
+  left: 8%;
+  width: 130px;
+  height: 310px;
+  transform: rotate(-15deg);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(8px 12px 18px rgba(0, 0, 0, 0.6));
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.floor-guitar:hover {
+  transform: rotate(-10deg) scale(1.05);
+}
+
+.guitar-body {
+  position: absolute;
+  bottom: 0;
+  width: 120px;
+  height: 170px;
+  background: radial-gradient(circle at 50% 40%, #ea580c 0%, #b45309 45%, #78350f 75%, #451a03 100%); /* Sunburst finish */
+  border-radius: 42% 42% 40% 40% / 50% 50% 45% 45%;
+  box-shadow: 
+    inset 0 4px 10px rgba(255,255,255,0.15),
+    inset 0 -6px 15px rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Guitar waist indentation */
+.guitar-body::before, .guitar-body::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 55px;
+  background: radial-gradient(circle, transparent 60%, #4a3222 62%);
+  top: 45px;
+}
+.guitar-body::before { left: -10px; }
+.guitar-body::after { right: -10px; transform: scaleX(-1); }
+
+.guitar-soundhole {
+  position: absolute;
+  top: 35px;
+  width: 32px;
+  height: 32px;
+  background: #0f172a; /* Deep dark hole */
+  border: 3px double #b45309; /* Rosette ring */
+  border-radius: 50%;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+  z-index: 3;
+}
+
+.guitar-bridge {
+  position: absolute;
+  bottom: 45px;
+  width: 45px;
+  height: 10px;
+  background: #1c1917;
+  border-radius: 2px;
+  z-index: 3;
+}
+
+.guitar-neck {
+  position: absolute;
+  bottom: 155px;
+  width: 14px;
+  height: 110px;
+  background: #78350f;
+  border-left: 1px solid #92400e;
+  border-right: 1px solid #451a03;
+  z-index: 1;
+}
+
+.guitar-frets {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: repeating-linear-gradient(0deg, #94a3b8 0px, #94a3b8 1px, transparent 1px, transparent 10px);
+  opacity: 0.6;
+}
+
+.guitar-strings {
+  position: absolute;
+  top: 0; left: 3px;
+  width: 8px; height: 100%;
+  background-image: repeating-linear-gradient(90deg, #e2e8f0 0px, #e2e8f0 1px, transparent 1px, transparent 2px);
+  opacity: 0.8;
+}
+
+.guitar-headstock {
+  position: absolute;
+  top: 15px;
+  width: 20px;
+  height: 35px;
+  background: #451a03;
+  border-radius: 4px 4px 2px 2px;
+  z-index: 2;
+  box-shadow: inset 0 1px 3px rgba(255,255,255,0.2);
+}
+
+.guitar-headstock::before {
+  content: '░';
+  font-size: 0.6rem;
+  color: #94a3b8;
+  position: absolute;
+  top: 5px; left: -5px;
+  letter-spacing: 2px;
+}
+.guitar-headstock::after {
+  content: '░';
+  font-size: 0.6rem;
+  color: #94a3b8;
+  position: absolute;
+  top: 5px; right: -5px;
+  letter-spacing: 2px;
+}
+
+.floor-camera {
+  position: absolute;
+  bottom: 14%;
+  right: 25%;
+  width: 85px;
+  height: 75px;
+  background: #f1f5f9; /* Cream/white plastic chassis */
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 
+    inset 0 2px 4px #fff,
+    inset 0 -2px 4px rgba(0,0,0,0.1),
+    6px 10px 18px rgba(0,0,0,0.4);
+  transform: rotate(15deg);
+  z-index: 2;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.floor-camera:hover {
+  transform: scale(1.08) rotate(10deg);
+}
+
+.camera-lens {
+  width: 48px;
+  height: 48px;
+  background: #0f172a;
+  border: 5px solid #cbd5e1;
+  border-radius: 50%;
+  box-shadow: 
+    0 2px 4px rgba(0,0,0,0.3),
+    inset 0 2px 5px rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+}
+
+.lens-glass {
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle at 35% 35%, #0284c7 0%, #0369a1 40%, #0c4a6e 80%, #020617 100%);
+  border-radius: 50%;
+  box-shadow: inset 0 1px 3px rgba(255,255,255,0.4);
+}
+
+.camera-flash {
+  position: absolute;
+  top: 8px; left: 8px;
+  width: 14px; height: 10px;
+  background: #e2e8f0;
+  border: 1.5px solid #94a3b8;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8);
+}
+
+.camera-stripe-blue, .camera-stripe-yellow, .camera-stripe-red {
+  position: absolute;
+  bottom: 0;
+  height: 5px;
+  z-index: 10;
+}
+.camera-stripe-blue {
+  left: 10px; width: 8px; background: #3b82f6;
+}
+.camera-stripe-yellow {
+  left: 18px; width: 8px; background: #eab308;
+}
+.camera-stripe-red {
+  left: 26px; width: 8px; background: #ef4444;
+}
+
+.desk-id-card {
+  position: absolute;
+  bottom: 25px;
+  left: 155px; /* lower left of the table */
+  width: 90px;
+  height: 135px;
+  transform: rotate(-10deg);
+  z-index: 5;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(4px 6px 12px rgba(0,0,0,0.4));
+}
+
+.desk-id-card:hover {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.id-lanyard {
+  position: absolute;
+  top: -45px;
+  left: 42px;
+  width: 10px;
+  height: 48px;
+  border: 2px solid #2563eb;
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  opacity: 0.85;
+}
+
+.id-badge {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 6px;
+  border: 2px solid #2563eb; /* Blue border frame */
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  position: relative;
+  background-image: linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 100% 4px;
+}
+
+.id-header {
+  font-family: var(--font-heading);
+  font-size: 0.45rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  border-bottom: 1.5px solid #2563eb;
+  width: 100%;
+  padding-bottom: 2px;
+  letter-spacing: 0.5px;
+}
+
+.id-photo {
+  font-size: 1.6rem;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.id-name {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin-top: 3px;
+  letter-spacing: 0.5px;
+}
+
+.id-role {
+  font-family: var(--font-body);
+  font-size: 0.45rem;
+  font-weight: 700;
+  color: #ef4444; /* red text badge */
+  background: rgba(239, 68, 68, 0.1);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.desk-logbook {
+  position: absolute;
+  top: 220px;
+  left: 20px;
+  width: 120px;
+  height: 170px;
+  background: #1e3a8a; /* Deep blue cover */
+  border-radius: 4px 10px 10px 4px;
+  box-shadow: 
+    inset 4px 0 5px rgba(0,0,0,0.3),
+    inset -2px 0 3px rgba(255,255,255,0.1),
+    4px 10px 22px rgba(0,0,0,0.55);
+  transform: rotate(8deg);
+  z-index: 5;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 15px 10px;
+  border-left: 5px solid #1d4ed8; /* Spine edge */
+}
+
+.desk-logbook:hover {
+  transform: scale(1.06) rotate(12deg);
+}
+
+.logbook-cover {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 2px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.logbook-label {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fef08a; /* gold yellow text */
+  letter-spacing: 1px;
+  border-bottom: 1.5px solid rgba(254, 240, 138, 0.3);
+  padding-bottom: 4px;
+  text-align: center;
+}
+
+.logbook-sub {
+  font-family: var(--font-handwritten);
+  font-size: 1rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.desk-logbook::before {
+  content: '';
+  position: absolute;
+  top: 4px; right: -3px;
+  width: 4px; height: calc(100% - 8px);
+  background: #f8fafc;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.25);
+  z-index: -1;
+}
+
+.sticky-note {
+  position: absolute;
+  width: 110px;
+  height: 105px;
+  padding: 10px 8px;
+  box-shadow: 3px 6px 12px rgba(0,0,0,0.3);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sticky-note:hover {
+  transform: scale(1.12) rotate(0deg) !important;
+  z-index: 12;
+  box-shadow: 6px 12px 20px rgba(0,0,0,0.45);
+}
+
+.yellow-note {
+  background: #fef08a; /* Yellow sticky note */
+  border-left: 2px solid #fde047;
+}
+
+.pink-note {
+  background: #fbcfe8; /* Pink sticky note */
+  border-left: 2px solid #f9a8d4;
+}
+
+.sticky-text {
+  font-family: var(--font-handwritten);
+  font-size: 1rem;
+  color: #1e293b;
+  text-align: center;
+  line-height: 1.25;
+}
+
 @media (max-width: 768px) {
+  .floor-guitar, .floor-camera, .desk-id-card, .desk-logbook, .sticky-note {
+    display: none !important;
+  }
+
   .welcome-card {
     padding: 25px;
   }
