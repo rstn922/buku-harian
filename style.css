@@ -1457,21 +1457,6 @@ body {
   display: none;
 }
 
-/* === WINDOW LIGHT SHADOWS CANVAS === */
-#shadow-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 4; /* Below book and buttons but above carpet/table mat */
-  pointer-events: none;
-  mix-blend-mode: multiply;
-  filter: blur(22px); /* GPU-accelerated blur */
-  opacity: 0.15; /* GPU-accelerated opacity */
-  will-change: transform;
-}
-
 /* === AMBIENT SUNLIGHT DUST CANVAS === */
 #ambient-canvas {
   position: fixed;
