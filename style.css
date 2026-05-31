@@ -630,6 +630,7 @@ body {
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.8s ease;
   z-index: 1;
+  will-change: transform;
 }
 
 .front, .back {
@@ -950,7 +951,8 @@ body {
   z-index: 1;
   cursor: pointer;
   pointer-events: auto;
-  transition: all 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
 }
 
 .scattered-polaroid:hover {
@@ -984,7 +986,8 @@ body {
   z-index: 1;
   cursor: pointer;
   pointer-events: auto;
-  transition: all 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
   font-family: var(--font-handwritten);
   color: #333;
 }
@@ -1030,6 +1033,7 @@ body {
     3px 12px 28px rgba(0, 0, 0, 0.4);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
   cursor: pointer;
+  will-change: transform, box-shadow;
 }
 
 .floor-polaroid:hover {
@@ -1451,6 +1455,21 @@ body {
   z-index: 1000;
   pointer-events: none;
   display: none;
+}
+
+/* === WINDOW LIGHT SHADOWS CANVAS === */
+#shadow-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 4; /* Below book and buttons but above carpet/table mat */
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  filter: blur(22px); /* GPU-accelerated blur */
+  opacity: 0.15; /* GPU-accelerated opacity */
+  will-change: transform;
 }
 
 /* === AMBIENT SUNLIGHT DUST CANVAS === */

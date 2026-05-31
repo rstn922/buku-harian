@@ -717,12 +717,249 @@ document.addEventListener('DOMContentLoaded', () => {
         ambientCtx.beginPath();
         ambientCtx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
         ambientCtx.fill();
+  // === 7. WINDOW LIGHT SHADOWS ANIMATION SYSTEM ===
+  const shadowCanvas = document.getElementById('shadow-canvas');
+  if (shadowCanvas) {
+    const shadowCtx = shadowCanvas.getContext('2d');
+    
+    function resizeShadowCanvas() {
+      shadowCanvas.width = window.innerWidth;
+      shadowCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeShadowCanvas);
+    resizeShadowCanvas();
+
+    class ShadowPerson {
+      constructor() {
+        this.height = 100 + Math.random() * 30;
+        this.headRadius = this.height * 0.12;
+        this.torsoWidth = this.height * 0.26;
+        this.torsoHeight = this.height * 0.40;
+        this.limbWidth = this.height * 0.08;
+
+        this.x = 0;
+        this.y = 0;
+        this.targetX = 0;
+        this.targetY = 0;
+        this.baseTargetX = 0;
+        this.baseTargetY = 0;
+        this.vx = 0;
+        this.vy = 0;
+        this.accel = 0.1;
+        this.maxSpeed = 2.2;
+        this.walkCycle = Math.random() * Math.PI * 2;
+        
+        resetRunningTarget(this);
+        // Start randomly at screen edge
+        this.x = this.targetX > 0 ? -100 : shadowCanvas.width + 100;
+        this.y = this.targetY * Math.random();
       }
 
-      requestAnimationFrame(animateAmbient);
+      update() {
+        const dx = this.targetX - this.x;
+        const dy = this.targetY - this.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > 5) {
+          const ax = (dx / dist) * this.accel;
+          const ay = (dy / dist) * this.accel;
+          this.vx += ax;
+          this.vy += ay;
+        }
+
+        // Apply friction
+        this.vx *= 0.95;
+        this.vy *= 0.95;
+
+        // Apply position
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Animate walk cycle based on velocity
+        const velocity = Math.hypot(this.vx, this.vy);
+        this.walkCycle += velocity * 0.08 + 0.015;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.fillStyle = '#1c120c';
+        ctx.strokeStyle = '#1c120c';
+        ctx.lineWidth = this.limbWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        const walkOffset = Math.sin(this.walkCycle);
+        const walkOffsetCos = Math.cos(this.walkCycle);
+
+        // 1. Head
+        ctx.beginPath();
+        ctx.arc(this.x, this.y - this.height, this.headRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2. Torso (Elliptical shape)
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y - this.height * 0.55, this.torsoWidth / 2, this.torsoHeight / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 3. Legs
+        const hipY = this.y - this.height * 0.25;
+        const hipXLeft = this.x - this.torsoWidth * 0.25;
+        const hipXRight = this.x + this.torsoWidth * 0.25;
+
+        // Left leg
+        ctx.beginPath();
+        ctx.moveTo(hipXLeft, hipY);
+        const kneeLeftX = hipXLeft + walkOffset * (this.height * 0.08);
+        const kneeLeftY = hipY + this.height * 0.12;
+        ctx.lineTo(kneeLeftX, kneeLeftY);
+        ctx.lineTo(kneeLeftX + walkOffset * (this.height * 0.1), this.y);
+        ctx.stroke();
+
+        // Right leg
+        ctx.beginPath();
+        ctx.moveTo(hipXRight, hipY);
+        const kneeRightX = hipXRight - walkOffset * (this.height * 0.08);
+        const kneeRightY = hipY + this.height * 0.12;
+        ctx.lineTo(kneeRightX, kneeRightY);
+        ctx.lineTo(kneeRightX - walkOffset * (this.height * 0.1), this.y);
+        ctx.stroke();
+
+        // 4. Arms
+        const shoulderY = this.y - this.height * 0.76;
+        const shoulderXLeft = this.x - this.torsoWidth * 0.45;
+        const shoulderXRight = this.x + this.torsoWidth * 0.45;
+
+        // Left arm
+        ctx.beginPath();
+        ctx.moveTo(shoulderXLeft, shoulderY);
+        const elbowLeftX = shoulderXLeft - (this.height * 0.06) + walkOffsetCos * (this.height * 0.06);
+        const elbowLeftY = shoulderY + this.height * 0.12;
+        ctx.lineTo(elbowLeftX, elbowLeftY);
+        ctx.lineTo(elbowLeftX - (this.height * 0.03) + walkOffsetCos * (this.height * 0.08), shoulderY + this.height * 0.26);
+        ctx.stroke();
+
+        // Right arm
+        ctx.beginPath();
+        ctx.moveTo(shoulderXRight, shoulderY);
+        const elbowRightX = shoulderXRight + (this.height * 0.06) - walkOffsetCos * (this.height * 0.06);
+        const elbowRightY = shoulderY + this.height * 0.12;
+        ctx.lineTo(elbowRightX, elbowRightY);
+        ctx.lineTo(elbowRightX + (this.height * 0.03) - walkOffsetCos * (this.height * 0.08), shoulderY + this.height * 0.26);
+        ctx.stroke();
+
+        ctx.restore();
+      }
     }
 
-    animateAmbient();
+    function resetRunningTarget(p) {
+      const side = Math.floor(Math.random() * 4);
+      if (side === 0) { // left to right
+        p.targetX = shadowCanvas.width + 200;
+        p.targetY = Math.random() * shadowCanvas.height;
+      } else if (side === 1) { // right to left
+        p.targetX = -200;
+        p.targetY = Math.random() * shadowCanvas.height;
+      } else if (side === 2) { // top to bottom
+        p.targetX = Math.random() * shadowCanvas.width;
+        p.targetY = shadowCanvas.height + 200;
+      } else { // bottom to top
+        p.targetX = Math.random() * shadowCanvas.width;
+        p.targetY = -200;
+      }
+    }
+
+    const people = [];
+    for (let i = 0; i < 4; i++) {
+      people.push(new ShadowPerson());
+    }
+
+    let globalState = 'RUNNING';
+    let stateTimer = 0;
+
+    function updateGlobalState() {
+      stateTimer++;
+      
+      // Change states: RUNNING (15s) -> GATHER (15s) -> DISPERSE (3s) -> RUNNING...
+      if (globalState === 'RUNNING' && stateTimer > 900) {
+        globalState = 'GATHER';
+        stateTimer = 0;
+        
+        // Gather in center area of carpet
+        const centerX = shadowCanvas.width * 0.46;
+        const centerY = shadowCanvas.height * 0.62;
+        const offsets = [
+          { x: -50, y: -25 },
+          { x: 45, y: -15 },
+          { x: -25, y: 45 },
+          { x: 35, y: 35 }
+        ];
+        people.forEach((p, idx) => {
+          p.maxSpeed = 1.6 + Math.random() * 0.5;
+          p.accel = 0.07;
+          p.baseTargetX = centerX + offsets[idx].x;
+          p.baseTargetY = centerY + offsets[idx].y;
+        });
+      } else if (globalState === 'GATHER' && stateTimer > 900) {
+        globalState = 'DISPERSE';
+        stateTimer = 0;
+        people.forEach((p) => {
+          p.maxSpeed = 4.8 + Math.random() * 1.2;
+          p.accel = 0.22;
+          const angle = Math.random() * Math.PI * 2;
+          p.targetX = p.x + Math.cos(angle) * 1600;
+          p.targetY = p.y + Math.sin(angle) * 1600;
+        });
+      } else if (globalState === 'DISPERSE' && stateTimer > 180) {
+        globalState = 'RUNNING';
+        stateTimer = 0;
+        people.forEach((p) => {
+          p.maxSpeed = 2.0 + Math.random() * 0.6;
+          p.accel = 0.08;
+          resetRunningTarget(p);
+        });
+      }
+    }
+
+    function animateShadows() {
+      shadowCtx.clearRect(0, 0, shadowCanvas.width, shadowCanvas.height);
+      
+      updateGlobalState();
+
+      for (let i = 0; i < people.length; i++) {
+        const p = people[i];
+        
+        if (globalState === 'RUNNING') {
+          // Reset targets if they walk offscreen
+          const isOffscreen = p.x < -220 || p.x > shadowCanvas.width + 220 || p.y < -220 || p.y > shadowCanvas.height + 220;
+          if (isOffscreen) {
+            // Spawn on opposite side
+            const incomingSide = Math.floor(Math.random() * 4);
+            if (incomingSide === 0) { // spawn left
+              p.x = -150; p.y = Math.random() * shadowCanvas.height;
+            } else if (incomingSide === 1) { // spawn right
+              p.x = shadowCanvas.width + 150; p.y = Math.random() * shadowCanvas.height;
+            } else if (incomingSide === 2) { // spawn top
+              p.x = Math.random() * shadowCanvas.width; p.y = -150;
+            } else { // spawn bottom
+              p.x = Math.random() * shadowCanvas.width; p.y = shadowCanvas.height + 150;
+            }
+            resetRunningTarget(p);
+          }
+        } else if (globalState === 'GATHER') {
+          // Micro-movement when gathering (swaying back and forth)
+          const time = Date.now() * 0.0022;
+          p.targetX = p.baseTargetX + Math.sin(time + i) * 10;
+          p.targetY = p.baseTargetY + Math.cos(time * 0.8 + i) * 6;
+        }
+
+        p.update();
+        p.draw(shadowCtx);
+      }
+
+      requestAnimationFrame(animateShadows);
+    }
+
+    animateShadows();
   }
 
 });
