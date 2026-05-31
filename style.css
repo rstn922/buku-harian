@@ -1488,130 +1488,6 @@ body {
 }
 
 /* === RETRO HOUSEHOLD MEMORY ITEMS === */
-.floor-guitar {
-  position: absolute;
-  bottom: 8%;
-  left: 8%;
-  width: 130px;
-  height: 310px;
-  transform: rotate(-15deg);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  filter: drop-shadow(8px 12px 18px rgba(0, 0, 0, 0.6));
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.floor-guitar:hover {
-  transform: rotate(-10deg) scale(1.05);
-}
-
-.guitar-body {
-  position: absolute;
-  bottom: 0;
-  width: 120px;
-  height: 170px;
-  background: radial-gradient(circle at 50% 40%, #ea580c 0%, #b45309 45%, #78350f 75%, #451a03 100%); /* Sunburst finish */
-  border-radius: 42% 42% 40% 40% / 50% 50% 45% 45%;
-  box-shadow: 
-    inset 0 4px 10px rgba(255,255,255,0.15),
-    inset 0 -6px 15px rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Guitar waist indentation */
-.guitar-body::before, .guitar-body::after {
-  content: '';
-  position: absolute;
-  width: 25px;
-  height: 55px;
-  background: radial-gradient(circle, transparent 60%, #4a3222 62%);
-  top: 45px;
-}
-.guitar-body::before { left: -10px; }
-.guitar-body::after { right: -10px; transform: scaleX(-1); }
-
-.guitar-soundhole {
-  position: absolute;
-  top: 35px;
-  width: 32px;
-  height: 32px;
-  background: #0f172a; /* Deep dark hole */
-  border: 3px double #b45309; /* Rosette ring */
-  border-radius: 50%;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
-  z-index: 3;
-}
-
-.guitar-bridge {
-  position: absolute;
-  bottom: 45px;
-  width: 45px;
-  height: 10px;
-  background: #1c1917;
-  border-radius: 2px;
-  z-index: 3;
-}
-
-.guitar-neck {
-  position: absolute;
-  bottom: 155px;
-  width: 14px;
-  height: 110px;
-  background: #78350f;
-  border-left: 1px solid #92400e;
-  border-right: 1px solid #451a03;
-  z-index: 1;
-}
-
-.guitar-frets {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-image: repeating-linear-gradient(0deg, #94a3b8 0px, #94a3b8 1px, transparent 1px, transparent 10px);
-  opacity: 0.6;
-}
-
-.guitar-strings {
-  position: absolute;
-  top: 0; left: 3px;
-  width: 8px; height: 100%;
-  background-image: repeating-linear-gradient(90deg, #e2e8f0 0px, #e2e8f0 1px, transparent 1px, transparent 2px);
-  opacity: 0.8;
-}
-
-.guitar-headstock {
-  position: absolute;
-  top: 15px;
-  width: 20px;
-  height: 35px;
-  background: #451a03;
-  border-radius: 4px 4px 2px 2px;
-  z-index: 2;
-  box-shadow: inset 0 1px 3px rgba(255,255,255,0.2);
-}
-
-.guitar-headstock::before {
-  content: '░';
-  font-size: 0.6rem;
-  color: #94a3b8;
-  position: absolute;
-  top: 5px; left: -5px;
-  letter-spacing: 2px;
-}
-.guitar-headstock::after {
-  content: '░';
-  font-size: 0.6rem;
-  color: #94a3b8;
-  position: absolute;
-  top: 5px; right: -5px;
-  letter-spacing: 2px;
-}
-
 .floor-camera {
   position: absolute;
   bottom: 14%;
@@ -1883,7 +1759,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  .floor-guitar, .floor-camera, .desk-id-card, .desk-logbook, .sticky-note {
+  .floor-camera, .desk-id-card, .desk-logbook, .sticky-note {
     display: none !important;
   }
 
