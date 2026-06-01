@@ -1199,12 +1199,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (captionEl) {
           captionText = captionEl.textContent;
         } else {
-          // It's a scrapbook photo, let's find its matching diary entry text
+          // It's a scrapbook photo, let's find the text visible on its LEFT page in the spread (back of sheet page-N-1)
           const parentPage = polaroid.closest('.page');
           if (parentPage) {
-            const textContainer = parentPage.querySelector('.back .scrapbook-text-area');
-            if (textContainer) {
-              captionText = Array.from(textContainer.querySelectorAll('p')).map(p => p.textContent).join('\n');
+            const pageIdMatch = parentPage.id.match(/page-(\d+)/);
+            if (pageIdMatch) {
+              const pageNum = parseInt(pageIdMatch[1], 10);
+              const prevPage = document.getElementById(`page-${pageNum - 1}`);
+              if (prevPage) {
+                const textElements = prevPage.querySelectorAll('.back .scrapbook-text-area p, .back h3, .back p.handwritten-text, .back p.signature-text');
+                if (textElements.length) {
+                  captionText = Array.from(textElements).map(el => el.textContent.trim()).join('\n');
+                } else {
+                  const fallbackElements = prevPage.querySelectorAll('.back p, .back h4, .back h3');
+                  if (fallbackElements.length) {
+                    captionText = Array.from(fallbackElements).map(el => el.textContent.trim()).join('\n');
+                  }
+                }
+              }
             }
           }
           if (!captionText && img) {
