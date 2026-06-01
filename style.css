@@ -2249,6 +2249,63 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.25s ease-in-out;
+}
+
+/* Polaroid Lightbox Navigation Buttons */
+.polaroid-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 10000;
+  outline: none;
+}
+
+.polaroid-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+}
+
+.polaroid-nav-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.polaroid-nav-btn.prev-btn {
+  left: 5%;
+}
+
+.polaroid-nav-btn.next-btn {
+  right: 5%;
+}
+
+@media (max-width: 768px) {
+  .polaroid-nav-btn {
+    width: 46px;
+    height: 46px;
+    font-size: 1.25rem;
+  }
+  .polaroid-nav-btn.prev-btn {
+    left: 3%;
+  }
+  .polaroid-nav-btn.next-btn {
+    right: 3%;
+  }
 }
 
 .fp-caption-zoomed {

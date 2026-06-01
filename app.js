@@ -1181,6 +1181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activePolaroid = null;
     let isOpen = false;
     let isClosing = false;
+    let currentCameraPhotoIndex = -1;
 
     const cameraPhotos = [
       "IMG_20250709_115251_770.jpg",
@@ -1252,9 +1253,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let captionText = "";
       if (polaroid === floorCamera) {
-        const randomPhoto = cameraPhotos[Math.floor(Math.random() * cameraPhotos.length)];
-        zoomedImg.src = `assets/photos/${randomPhoto}`;
+        currentCameraPhotoIndex = Math.floor(Math.random() * cameraPhotos.length);
+        const currentPhoto = cameraPhotos[currentCameraPhotoIndex];
+        zoomedImg.src = `assets/photos/${currentPhoto}`;
         captionText = "Hasil Foto Polaroid";
+        
+        document.getElementById('polaroid-prev-btn').style.display = 'flex';
+        document.getElementById('polaroid-next-btn').style.display = 'flex';
       } else {
         // Extract photo details
         const img = polaroid.querySelector('img');
@@ -1294,6 +1299,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         }
+        
+        document.getElementById('polaroid-prev-btn').style.display = 'none';
+        document.getElementById('polaroid-next-btn').style.display = 'none';
       }
       zoomedCaption.textContent = captionText;
 
@@ -1370,7 +1378,46 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Navigation buttons click events
+    const prevBtn = document.getElementById('polaroid-prev-btn');
+    const nextBtn = document.getElementById('polaroid-next-btn');
+
+    if (prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!isOpen || isClosing || activePolaroid !== floorCamera) return;
+
+        currentCameraPhotoIndex = (currentCameraPhotoIndex - 1 + cameraPhotos.length) % cameraPhotos.length;
+        const currentPhoto = cameraPhotos[currentCameraPhotoIndex];
+        
+        zoomedImg.style.opacity = '0';
+        setTimeout(() => {
+          zoomedImg.src = `assets/photos/${currentPhoto}`;
+          zoomedImg.onload = () => {
+            zoomedImg.style.opacity = '1';
+          };
+        }, 150);
+      });
+
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!isOpen || isClosing || activePolaroid !== floorCamera) return;
+
+        currentCameraPhotoIndex = (currentCameraPhotoIndex + 1) % cameraPhotos.length;
+        const currentPhoto = cameraPhotos[currentCameraPhotoIndex];
+        
+        zoomedImg.style.opacity = '0';
+        setTimeout(() => {
+          zoomedImg.src = `assets/photos/${currentPhoto}`;
+          zoomedImg.onload = () => {
+            zoomedImg.style.opacity = '1';
+          };
+        }, 150);
+      });
+    }
+
     polaroidOverlay.addEventListener('click', (e) => {
+      if (e.target.closest('.polaroid-nav-btn')) return;
       if (e.target !== polaroidOverlay && !e.target.classList.contains('polaroid-lightbox') && e.target.closest('.polaroid-lightbox')) return;
 
       if (!isOpen || isClosing || !activePolaroid) return;
@@ -1413,6 +1460,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.style.transform = '';
         activePolaroid = null;
         isClosing = false;
+        currentCameraPhotoIndex = -1;
       }, 550);
     });
 
