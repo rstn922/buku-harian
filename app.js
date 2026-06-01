@@ -245,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnOpenJurnal.addEventListener('click', () => {
       welcomeScreen.classList.add('fade-out');
       playMusic();
+      preloadAllCameraPhotos(); // Start preloading all 58 large photos in background
     });
   }
 
@@ -1266,8 +1267,77 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   setupStickyNoteInspect('desk-yellow-note', 'yellow-note-overlay', -5);
-  setupStickyNoteInspect('desk-pink-note', 'pink-note-overlay', 4);
+  // Preload all 58 camera photos in background to avoid any delay or black screen stuck bugs
+  const cameraPhotosList = [
+    "IMG_20250709_115251_770.jpg",
+    "IMG_20250710_123012_068.jpg",
+    "IMG_20250712_122848_313.jpg",
+    "IMG_20250720_163813_229.jpg",
+    "IMG_20250720_163817_605.jpg",
+    "IMG_20250720_163818_651.jpg",
+    "IMG_20250720_163819_670.jpg",
+    "IMG_20250722_213405_490.jpg",
+    "IMG_20250723_172437_9.jpg",
+    "IMG_20250726_115817_8.jpg",
+    "IMG_20250728_114145_541.jpg",
+    "IMG_20250728_122556_691.jpg",
+    "IMG_20250728_124029_623.jpg",
+    "IMG_20250803_173552_5.jpg",
+    "IMG_20250811_211740_980.jpg",
+    "IMG_20250812_222931_282.jpg",
+    "IMG_20250813_153802_359.jpg",
+    "IMG_20250816_215506_213.jpg",
+    "IMG_20250816_215747_763.jpg",
+    "IMG_20250816_221328_773.jpg",
+    "IMG_20250816_221407_482.jpg",
+    "IMG_20250817_224507_5.jpg",
+    "IMG_20251119_120911_509.jpg",
+    "IMG_20251119_120923_193.jpg",
+    "IMG_20251119_121734_908.jpg",
+    "IMG_20251119_121759_164.jpg",
+    "IMG_20251119_121805_452.jpg",
+    "IMG_20251119_121819_113.jpg",
+    "IMG_20251119_121851_975.jpg",
+    "IMG_20251119_121857_118.jpg",
+    "IMG_20260528_030455_905.jpg",
+    "IMG-20250720-WA0010.jpg",
+    "IMG-20250817-WA0162.jpg",
+    "IMG-20250818-WA0020.jpg",
+    "IMG-20250818-WA0520.jpg",
+    "IMG-20251119-WA0069.jpg",
+    "IMG-20251119-WA0071.jpg",
+    "IMG-20251119-WA0074.jpg",
+    "IMG-20251119-WA0075.jpg",
+    "IMG-20251119-WA0079.jpg",
+    "IMG-20251119-WA0122.jpg",
+    "IMG-20251119-WA0124.jpg",
+    "IMG-20251119-WA0126.jpg",
+    "IMG-20251119-WA0128.jpg",
+    "IMG-20251119-WA0130.jpg",
+    "IMG-20251119-WA0132.jpg",
+    "IMG-20251119-WA0134.jpg",
+    "IMG-20251119-WA0136.jpg",
+    "IMG-20251119-WA0138.jpg",
+    "IMG-20251119-WA0140.jpg",
+    "IMG-20251119-WA0142.jpg",
+    "IMG-20251119-WA0144.jpg",
+    "IMG-20251119-WA0146.jpg",
+    "IMG-20251119-WA0148.jpg",
+    "IMG-20251119-WA0150.jpg",
+    "IMG-20251119-WA0152.jpg",
+    "IMG-20251119-WA0154.jpg",
+    "IMG-20251119-WA0156.jpg"
+  ];
 
+  function preloadAllCameraPhotos() {
+    // Asynchronously prefetch photos to cache them
+    setTimeout(() => {
+      cameraPhotosList.forEach(photo => {
+        const img = new Image();
+        img.src = `assets/photos/${photo}`;
+      });
+    }, 100);
+  }
 
   // === 10. POLAROID FLOOR PHOTOS & SCRAPBOOK PHOTOS ZOOM/INSPECT INTERACTION ===
   const floorPolaroids = document.querySelectorAll('.floor-polaroid, .scrapbook-photo-slot');
@@ -1479,6 +1549,22 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Reusable smooth photo swap logic with preloading to completely eliminate black-screen flickers
+    const changeZoomedPhoto = (newPhotoName) => {
+      zoomedImg.style.opacity = '0'; // Smooth fade out
+      
+      const newSrc = `assets/photos/${newPhotoName}`;
+      const tempImg = new Image();
+      
+      tempImg.onload = () => {
+        // Swap src only when fully fetched and cached by browser, then fade back in
+        zoomedImg.src = newSrc;
+        zoomedImg.style.opacity = '1';
+      };
+      
+      tempImg.src = newSrc;
+    };
+
     // Navigation buttons click events
     const prevBtn = document.getElementById('polaroid-prev-btn');
     const nextBtn = document.getElementById('polaroid-next-btn');
@@ -1490,14 +1576,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentCameraPhotoIndex = (currentCameraPhotoIndex - 1 + cameraPhotos.length) % cameraPhotos.length;
         const currentPhoto = cameraPhotos[currentCameraPhotoIndex];
-        
-        zoomedImg.style.opacity = '0';
-        setTimeout(() => {
-          zoomedImg.src = `assets/photos/${currentPhoto}`;
-          zoomedImg.onload = () => {
-            zoomedImg.style.opacity = '1';
-          };
-        }, 150);
+        changeZoomedPhoto(currentPhoto);
       });
 
       nextBtn.addEventListener('click', (e) => {
@@ -1506,14 +1585,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentCameraPhotoIndex = (currentCameraPhotoIndex + 1) % cameraPhotos.length;
         const currentPhoto = cameraPhotos[currentCameraPhotoIndex];
-        
-        zoomedImg.style.opacity = '0';
-        setTimeout(() => {
-          zoomedImg.src = `assets/photos/${currentPhoto}`;
-          zoomedImg.onload = () => {
-            zoomedImg.style.opacity = '1';
-          };
-        }, 150);
+        changeZoomedPhoto(currentPhoto);
       });
     }
 
