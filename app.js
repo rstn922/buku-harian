@@ -1330,13 +1330,21 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function preloadAllCameraPhotos() {
-    // Asynchronously prefetch photos to cache them
-    setTimeout(() => {
-      cameraPhotosList.forEach(photo => {
-        const img = new Image();
-        img.src = `assets/photos/${photo}`;
-      });
-    }, 100);
+    // Load photos sequentially to avoid saturating the browser network queue
+    let index = 0;
+    const preloadNext = () => {
+      if (index >= cameraPhotosList.length) return;
+      const img = new Image();
+      img.onload = img.onerror = () => {
+        // Wait 250ms before loading the next one to keep the network pipeline free
+        setTimeout(preloadNext, 250);
+      };
+      img.src = `assets/photos/${cameraPhotosList[index]}`;
+      index++;
+    };
+    
+    // Start preloading after a short delay, one by one
+    setTimeout(preloadNext, 1500);
   }
 
   // === 10. POLAROID FLOOR PHOTOS & SCRAPBOOK PHOTOS ZOOM/INSPECT INTERACTION ===
@@ -1423,18 +1431,40 @@ document.addEventListener('DOMContentLoaded', () => {
       isClosing = false;
 
       let captionText = "";
+      const spinner = document.getElementById('polaroid-spinner');
+      
       if (polaroid === floorCamera) {
         currentCameraPhotoIndex = Math.floor(Math.random() * cameraPhotos.length);
         const currentPhoto = cameraPhotos[currentCameraPhotoIndex];
-        zoomedImg.src = `assets/photos/${currentPhoto}`;
+        
+        // Premium transition with loading spinner overlay
+        if (spinner) spinner.classList.add('active');
+        zoomedImg.style.opacity = '0';
+        
+        const newSrc = `assets/photos/${currentPhoto}`;
+        const tempImg = new Image();
+        tempImg.onload = () => {
+          zoomedImg.src = newSrc;
+          zoomedImg.style.opacity = '1';
+          if (spinner) spinner.classList.remove('active');
+        };
+        tempImg.onerror = () => {
+          zoomedImg.src = newSrc;
+          zoomedImg.style.opacity = '1';
+          if (spinner) spinner.classList.remove('active');
+        };
+        tempImg.src = newSrc;
+        
         captionText = "";
         
         document.getElementById('polaroid-prev-btn').style.display = 'flex';
         document.getElementById('polaroid-next-btn').style.display = 'flex';
       } else {
-        // Extract photo details
+        // Ensure image opacity is fully visible and spinner is inactive for already loaded polaroids
+        if (spinner) spinner.classList.remove('active');
         const img = polaroid.querySelector('img');
         zoomedImg.src = img ? img.src : '';
+        zoomedImg.style.opacity = '1';
         
         let captionEl = polaroid.querySelector('.fp-caption');
         if (captionEl) {
@@ -1549,8 +1579,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Reusable smooth photo swap logic with preloading to completely eliminate black-screen flickers
+    // Reusable smooth photo swap logic with preloading & spinner to completely eliminate black-screen flickers
     const changeZoomedPhoto = (newPhotoName) => {
+      const spinner = document.getElementById('polaroid-spinner');
+      if (spinner) spinner.classList.add('active');
       zoomedImg.style.opacity = '0'; // Smooth fade out
       
       const newSrc = `assets/photos/${newPhotoName}`;
@@ -1560,6 +1592,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Swap src only when fully fetched and cached by browser, then fade back in
         zoomedImg.src = newSrc;
         zoomedImg.style.opacity = '1';
+        if (spinner) spinner.classList.remove('active');
+      };
+      
+      tempImg.onerror = () => {
+        zoomedImg.src = newSrc;
+        zoomedImg.style.opacity = '1';
+        if (spinner) spinner.classList.remove('active');
       };
       
       tempImg.src = newSrc;
@@ -1634,6 +1673,12 @@ document.addEventListener('DOMContentLoaded', () => {
         activePolaroid = null;
         isClosing = false;
         currentCameraPhotoIndex = -1;
+        
+        // Reset zoomedImg src and styles to avoid showing old photo on next open
+        zoomedImg.src = '';
+        zoomedImg.style.opacity = '1';
+        const spinner = document.getElementById('polaroid-spinner');
+        if (spinner) spinner.classList.remove('active');
       }, 550);
     });
 
