@@ -725,5 +725,20 @@ document.addEventListener('DOMContentLoaded', () => {
     animateAmbient();
   }
 
+  // === 7. ID CARD ZOOM/LIGHTBOX INTERACTION ===
+  const deskIdCard = document.getElementById('desk-id-card');
+  const idCardOverlay = document.getElementById('id-card-overlay');
+  
+  if (deskIdCard && idCardOverlay) {
+    deskIdCard.addEventListener('click', (e) => {
+      e.stopPropagation();
+      idCardOverlay.classList.add('active');
+    });
+    
+    idCardOverlay.addEventListener('click', () => {
+      idCardOverlay.classList.remove('active');
+    });
+  }
+
 });
 
