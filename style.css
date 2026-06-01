@@ -2257,29 +2257,30 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 54px;
-  height: 54px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   z-index: 10000;
   outline: none;
 }
 
 .polaroid-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.6);
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
 }
 
 .polaroid-nav-btn:active {
@@ -2287,24 +2288,24 @@ body {
 }
 
 .polaroid-nav-btn.prev-btn {
-  left: 5%;
+  left: 3%;
 }
 
 .polaroid-nav-btn.next-btn {
-  right: 5%;
+  right: 3%;
 }
 
 @media (max-width: 768px) {
   .polaroid-nav-btn {
-    width: 46px;
-    height: 46px;
-    font-size: 1.25rem;
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
   }
   .polaroid-nav-btn.prev-btn {
-    left: 3%;
+    left: 2%;
   }
   .polaroid-nav-btn.next-btn {
-    right: 3%;
+    right: 2%;
   }
 }
 

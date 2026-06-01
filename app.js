@@ -1256,7 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentCameraPhotoIndex = Math.floor(Math.random() * cameraPhotos.length);
         const currentPhoto = cameraPhotos[currentCameraPhotoIndex];
         zoomedImg.src = `assets/photos/${currentPhoto}`;
-        captionText = "Hasil Foto Polaroid";
+        captionText = "";
         
         document.getElementById('polaroid-prev-btn').style.display = 'flex';
         document.getElementById('polaroid-next-btn').style.display = 'flex';
