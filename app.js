@@ -258,10 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
       unoSunsetCard.style.transform = 'scale(1.22) rotate(-8deg)';
       
       const rect = unoSunsetCard.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
       
-      spawnWordExplosion(centerX, centerY);
+      startWordRain();
       
       setTimeout(() => {
         unoSunsetCard.style.transform = originalTransform;
@@ -269,24 +267,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function spawnWordExplosion(startX, startY) {
+  function startWordRain() {
     const words = ["YOU ARE MY EVERYTHING", "MY EVERYTHING", "MY EVERYTHING"];
-    const particleCount = 85; // Massive amount of particles
+    const rainDuration = 5000; // Rain lasts exactly 5 seconds
+    const spawnIntervalTime = 60; // Spawn a new word every 60ms
     
-    for (let i = 0; i < particleCount; i++) {
+    const colors = ["#ff7e5f", "#feb47b", "#ff5e36", "#ffa834", "#ffffff", "#ff3366"];
+
+    const spawnRaindrop = () => {
       const p = document.createElement('div');
-      p.className = 'word-shatter-particle';
+      p.className = 'word-rain-particle';
       p.textContent = words[Math.floor(Math.random() * words.length)];
       
-      // Warm sunset tones matching the sunset-card theme
-      const colors = ["#ff7e5f", "#feb47b", "#ff5e36", "#ffa834", "#ffffff", "#ff3366"];
       const color = colors[Math.floor(Math.random() * colors.length)];
+      const startX = Math.random() * window.innerWidth;
+      const startY = -40; // start just above the viewport
       
-      // Random velocity, angle, spin, size, and gravity
-      const angle = Math.random() * Math.PI * 2;
-      const force = Math.random() * 9 + 4; // high speed burst
-      const vx = Math.cos(angle) * force;
-      const vy = Math.sin(angle) * force - Math.random() * 4; // slight upward bias
+      // Warm, glowing drop speed & sway physics
+      const speed = Math.random() * 4 + 3; // vertical speed: 3px to 7px per frame
+      const swaySpeed = Math.random() * 0.04 + 0.01;
+      const swayWidth = Math.random() * 1.5 + 0.5;
       
       p.style.position = 'fixed';
       p.style.left = `${startX}px`;
@@ -295,46 +295,59 @@ document.addEventListener('DOMContentLoaded', () => {
       p.style.fontFamily = "'Outfit', sans-serif";
       p.style.fontWeight = '900';
       
-      // Random sizes for depth representation
-      const fontSize = Math.random() * 0.75 + 0.55; // 0.55rem to 1.3rem
+      // Vary font sizes to create natural parallax depth
+      const fontSize = Math.random() * 0.8 + 0.65; // 0.65rem to 1.45rem
       p.style.fontSize = `${fontSize}rem`;
-      p.style.textShadow = `0 2px 8px ${color}80, 0 0 20px ${color}33`;
+      p.style.textShadow = `0 4px 12px ${color}80, 0 0 25px ${color}33`;
       p.style.pointerEvents = 'none';
       p.style.whiteSpace = 'nowrap';
       p.style.zIndex = '99999';
-      p.style.opacity = '1';
+      p.style.opacity = '0';
       p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+      p.style.transition = 'opacity 0.2s ease-in-out';
       
       document.body.appendChild(p);
       
+      // Quickly fade in the raindrop
+      requestAnimationFrame(() => {
+        p.style.opacity = '1';
+      });
+      
       let curX = startX;
       let curY = startY;
-      let curVx = vx;
-      let curVy = vy;
-      let curRot = Math.random() * 360;
-      const rotSpeed = (Math.random() * 12 - 6);
-      let curAlpha = 1;
-      const decay = Math.random() * 0.016 + 0.008; // smooth fadeout
+      let swayAngle = Math.random() * Math.PI * 2;
+      let curRot = Math.random() * 20 - 10; // slight static rotation
       
       const updateInterval = setInterval(() => {
-        curX += curVx;
-        curY += curVy;
-        curVy += 0.16; // gravity
-        curVx *= 0.98; // air resistance
-        curRot += rotSpeed;
-        curAlpha -= decay;
+        curY += speed;
+        swayAngle += swaySpeed;
+        curX += Math.sin(swayAngle) * swayWidth; // gentle swaying
         
         p.style.left = `${curX}px`;
         p.style.top = `${curY}px`;
         p.style.transform = `translate(-50%, -50%) rotate(${curRot}deg)`;
-        p.style.opacity = curAlpha;
         
-        if (curAlpha <= 0) {
+        // Start fading out when approaching the bottom of the viewport
+        if (curY > window.innerHeight - 100) {
+          const fadeLeft = (window.innerHeight - curY) / 100;
+          p.style.opacity = Math.max(0, fadeLeft);
+        }
+        
+        // Remove completely once offscreen
+        if (curY > window.innerHeight + 40) {
           clearInterval(updateInterval);
           p.remove();
         }
       }, 16);
-    }
+    };
+
+    // Continuous spawn loop
+    const spawnTimer = setInterval(spawnRaindrop, spawnIntervalTime);
+
+    // Stop spawning after 5 seconds
+    setTimeout(() => {
+      clearInterval(spawnTimer);
+    }, rainDuration);
   }
 
   const scatteredPolaroids = document.querySelectorAll('.floor-polaroid');
