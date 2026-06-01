@@ -249,6 +249,94 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // === 4. SCATTERED DECORATIONS INTERACTION ===
+  const unoSunsetCard = document.getElementById('uno-sunset-card');
+  if (unoSunsetCard) {
+    unoSunsetCard.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const originalTransform = unoSunsetCard.style.transform || 'rotate(12deg)';
+      unoSunsetCard.style.transition = 'transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      unoSunsetCard.style.transform = 'scale(1.22) rotate(-8deg)';
+      
+      const rect = unoSunsetCard.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      spawnWordExplosion(centerX, centerY);
+      
+      setTimeout(() => {
+        unoSunsetCard.style.transform = originalTransform;
+      }, 350);
+    });
+  }
+
+  function spawnWordExplosion(startX, startY) {
+    const words = ["YOU ARE MY EVERYTHING", "MY EVERYTHING", "MY EVERYTHING"];
+    const particleCount = 85; // Massive amount of particles
+    
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement('div');
+      p.className = 'word-shatter-particle';
+      p.textContent = words[Math.floor(Math.random() * words.length)];
+      
+      // Warm sunset tones matching the sunset-card theme
+      const colors = ["#ff7e5f", "#feb47b", "#ff5e36", "#ffa834", "#ffffff", "#ff3366"];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Random velocity, angle, spin, size, and gravity
+      const angle = Math.random() * Math.PI * 2;
+      const force = Math.random() * 9 + 4; // high speed burst
+      const vx = Math.cos(angle) * force;
+      const vy = Math.sin(angle) * force - Math.random() * 4; // slight upward bias
+      
+      p.style.position = 'fixed';
+      p.style.left = `${startX}px`;
+      p.style.top = `${startY}px`;
+      p.style.color = color;
+      p.style.fontFamily = "'Outfit', sans-serif";
+      p.style.fontWeight = '900';
+      
+      // Random sizes for depth representation
+      const fontSize = Math.random() * 0.75 + 0.55; // 0.55rem to 1.3rem
+      p.style.fontSize = `${fontSize}rem`;
+      p.style.textShadow = `0 2px 8px ${color}80, 0 0 20px ${color}33`;
+      p.style.pointerEvents = 'none';
+      p.style.whiteSpace = 'nowrap';
+      p.style.zIndex = '99999';
+      p.style.opacity = '1';
+      p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+      
+      document.body.appendChild(p);
+      
+      let curX = startX;
+      let curY = startY;
+      let curVx = vx;
+      let curVy = vy;
+      let curRot = Math.random() * 360;
+      const rotSpeed = (Math.random() * 12 - 6);
+      let curAlpha = 1;
+      const decay = Math.random() * 0.016 + 0.008; // smooth fadeout
+      
+      const updateInterval = setInterval(() => {
+        curX += curVx;
+        curY += curVy;
+        curVy += 0.16; // gravity
+        curVx *= 0.98; // air resistance
+        curRot += rotSpeed;
+        curAlpha -= decay;
+        
+        p.style.left = `${curX}px`;
+        p.style.top = `${curY}px`;
+        p.style.transform = `translate(-50%, -50%) rotate(${curRot}deg)`;
+        p.style.opacity = curAlpha;
+        
+        if (curAlpha <= 0) {
+          clearInterval(updateInterval);
+          p.remove();
+        }
+      }, 16);
+    }
+  }
+
   const scatteredPolaroids = document.querySelectorAll('.floor-polaroid');
   scatteredPolaroids.forEach(polaroid => {
     polaroid.addEventListener('click', (e) => {

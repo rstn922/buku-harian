@@ -1407,6 +1407,12 @@ body {
   z-index: 10;
 }
 
+.sunset-card {
+  background: radial-gradient(circle at 35% 35%, #ff7e5f 0%, #feb47b 60%, #ff5e36 100%); /* Gorgeous warm sunset gradient */
+  color: #fff;
+  border-color: #ffe3d1 !important;
+}
+
 .red-card {
   background: radial-gradient(circle, #ef4444 60%, #991b1b 100%);
   color: #fff;
