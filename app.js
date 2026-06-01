@@ -725,18 +725,114 @@ document.addEventListener('DOMContentLoaded', () => {
     animateAmbient();
   }
 
-  // === 7. ID CARD ZOOM/LIGHTBOX INTERACTION ===
+  // === 7. ID CARD ZOOM/LIGHTBOX INTERACTION (GAME INSPECT STYLE) ===
   const deskIdCard = document.getElementById('desk-id-card');
   const idCardOverlay = document.getElementById('id-card-overlay');
   
   if (deskIdCard && idCardOverlay) {
+    const lightbox = idCardOverlay.querySelector('.id-card-lightbox');
+    let isClosing = false;
+    let isOpen = false;
+    
     deskIdCard.addEventListener('click', (e) => {
+      if (isOpen || isClosing) return;
       e.stopPropagation();
+      
+      isOpen = true;
+      isClosing = false;
+      
+      // Calculate screen positions
+      const rect = deskIdCard.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+      
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 280; // normalized to standard width
+      
+      // Step 1: Place the lightbox exactly over the desk card, matches rotation
+      lightbox.style.transition = 'none';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(-10deg)`;
+      
+      // Step 2: Make the desk card invisible
+      deskIdCard.style.opacity = '0';
+      deskIdCard.style.pointerEvents = 'none';
+      
+      // Step 3: Open the overlay (darkens background)
       idCardOverlay.classList.add('active');
+      
+      // Trigger browser reflow
+      lightbox.offsetHeight;
+      
+      // Step 4: Animate from the table to center of the screen
+      lightbox.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.2, 0.5, 1)';
+      lightbox.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
     });
     
-    idCardOverlay.addEventListener('click', () => {
+    idCardOverlay.addEventListener('click', (e) => {
+      // Close only if clicking the background overlay itself
+      if (e.target !== idCardOverlay && !e.target.classList.contains('id-card-lightbox') && e.target.closest('.id-card-lightbox')) return;
+      
+      if (!isOpen || isClosing) return;
+      
+      isClosing = true;
+      isOpen = false;
+      
+      // Calculate target screen position of desk card
+      const rect = deskIdCard.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+      
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 280;
+      
+      // Step 1: Fly back to desk card
+      lightbox.style.transition = 'transform 0.55s cubic-bezier(0.55, 0, 0.1, 1)';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(-10deg)`;
+      
+      // Step 2: Fade out background
       idCardOverlay.classList.remove('active');
+      
+      // Step 3: Clean up
+      setTimeout(() => {
+        deskIdCard.style.opacity = '1';
+        deskIdCard.style.pointerEvents = 'auto';
+        lightbox.style.transition = '';
+        lightbox.style.transform = '';
+        isClosing = false;
+      }, 550);
+    });
+    
+    // AAA Game Parallax Tilt Effect on Inspect
+    idCardOverlay.addEventListener('mousemove', (e) => {
+      if (!isOpen || isClosing) return;
+      
+      const rect = lightbox.getBoundingClientRect();
+      const x = e.clientX - (rect.left + rect.width / 2);
+      const y = e.clientY - (rect.top + rect.height / 2);
+      
+      // Gentle 3D tilt
+      const tiltX = (y / (window.innerHeight / 2)) * -12;
+      const tiltY = (x / (window.innerWidth / 2)) * 12;
+      
+      lightbox.style.transition = 'transform 0.1s ease-out';
+      lightbox.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03) translateZ(20px)`;
+    });
+    
+    // Reset hover effect when mouse leaves
+    idCardOverlay.addEventListener('mouseleave', () => {
+      if (!isOpen || isClosing) return;
+      lightbox.style.transition = 'transform 0.4s ease-out';
+      lightbox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
     });
   }
 
