@@ -66,6 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateBook() {
     const isMobile = window.innerWidth <= 768;
     
+    const bookWrapper = document.getElementById('book-wrapper');
+    if (bookWrapper) {
+      if (!isMobile) {
+        if (currentSpread === 0) {
+          bookWrapper.classList.add('closed-cover');
+          bookWrapper.classList.remove('closed-back');
+        } else if (currentSpread === totalSpreads - 1) {
+          bookWrapper.classList.remove('closed-cover');
+          bookWrapper.classList.add('closed-back');
+        } else {
+          bookWrapper.classList.remove('closed-cover');
+          bookWrapper.classList.remove('closed-back');
+        }
+      } else {
+        bookWrapper.classList.remove('closed-cover');
+        bookWrapper.classList.remove('closed-back');
+      }
+    }
+    
     if (isMobile) {
       pages.forEach((page, i) => {
         const activePageElementIndex = Math.floor(mobilePageIndex / 2);
