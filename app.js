@@ -856,11 +856,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let isOpen = false;
 
     function updateMiniBook() {
-      // Determine if opened or closed (Spread 0 and Spread 4 are closed cover states)
-      if (currentMiniSpread > 0 && currentMiniSpread < totalMiniSpreads - 1) {
-        logbookLightbox.classList.add('opened');
+      // Manage visual centering based on which page is open
+      if (currentMiniSpread === 0) {
+        // Closed cover: Shift book left by 140px to center the cover on screen
+        miniBook.style.transform = 'translateX(-140px)';
+      } else if (currentMiniSpread === totalMiniSpreads - 1) {
+        // Closed back cover: Shift book right by 140px to center the back cover
+        miniBook.style.transform = 'translateX(140px)';
       } else {
-        logbookLightbox.classList.remove('opened');
+        // Opened: Spine is at center (translateX 0)
+        miniBook.style.transform = 'translateX(0px)';
       }
 
       miniPages.forEach((page, i) => {
@@ -945,7 +950,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const scale = rect.width / 280;
       
       // Close transition (returns book to desk size & angle)
-      logbookLightbox.classList.remove('opened'); // close spreads first
+      currentMiniSpread = 0;
+      updateMiniBook();
       logbookLightbox.style.transition = 'transform 0.55s cubic-bezier(0.55, 0, 0.1, 1)';
       logbookLightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(8deg)`;
       

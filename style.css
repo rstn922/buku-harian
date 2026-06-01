@@ -1888,7 +1888,7 @@ body {
 
 .logbook-lightbox {
   position: relative;
-  width: 320px;
+  width: 560px;
   height: 460px;
   perspective: 1500px;
   display: flex;
@@ -1899,37 +1899,24 @@ body {
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.logbook-lightbox.opened {
-  width: 600px;
-}
-
 .mini-book {
   position: relative;
-  width: 280px;
+  width: 560px;
   height: 400px;
   transform-style: preserve-3d;
-  transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s ease;
-}
-
-.logbook-lightbox.opened .mini-book {
-  width: 560px;
-  transform: translateX(140px);
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .mini-page {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 280px;
+  width: 280px;
   height: 100%;
   transform-origin: left center;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
   z-index: 10;
-}
-
-.logbook-lightbox.opened .mini-page {
-  width: 50%;
 }
 
 .mini-front, .mini-back {
