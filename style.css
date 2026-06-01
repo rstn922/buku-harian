@@ -522,7 +522,7 @@ body {
 }
 
 .mp3-center-btn::before {
-  content: '▶/⏸';
+  content: '▶/||';
   font-size: 0.6rem;
   color: #334155;
   font-weight: 700;

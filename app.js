@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function spawnActivationSparks(x, y) {
-    const particlesList = ['❤️', '✨', '🌸', '⭐', '🎈'];
+    const particlesList = ['*', '+', 'o', 'x', '.'];
     for (let i = 0; i < 8; i++) {
       const particle = document.createElement('div');
       particle.className = 'polaroid-particle';
