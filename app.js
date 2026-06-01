@@ -1168,8 +1168,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupStickyNoteInspect('desk-pink-note', 'pink-note-overlay', 4);
 
 
-  // === 10. POLAROID FLOOR PHOTOS ZOOM/INSPECT INTERACTION ===
-  const floorPolaroids = document.querySelectorAll('.floor-polaroid');
+  // === 10. POLAROID FLOOR PHOTOS & SCRAPBOOK PHOTOS ZOOM/INSPECT INTERACTION ===
+  const floorPolaroids = document.querySelectorAll('.floor-polaroid, .scrapbook-photo-slot');
   const polaroidOverlay = document.getElementById('polaroid-overlay');
 
   if (floorPolaroids.length && polaroidOverlay) {
@@ -1192,9 +1192,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Extract photo details
         const img = polaroid.querySelector('img');
-        const caption = polaroid.querySelector('.fp-caption');
-        zoomedImg.src = img.src;
-        zoomedCaption.textContent = caption.textContent;
+        zoomedImg.src = img ? img.src : '';
+        
+        let captionText = "";
+        const captionEl = polaroid.querySelector('.fp-caption');
+        if (captionEl) {
+          captionText = captionEl.textContent;
+        } else {
+          // It's a scrapbook photo, let's find its matching diary entry text
+          const parentPage = polaroid.closest('.page');
+          if (parentPage) {
+            const textContainer = parentPage.querySelector('.back .scrapbook-text-area');
+            if (textContainer) {
+              captionText = Array.from(textContainer.querySelectorAll('p')).map(p => p.textContent).join('\n');
+            }
+          }
+          if (!captionText && img) {
+            captionText = img.alt;
+          }
+        }
+        zoomedCaption.textContent = captionText || "Momen Indah";
 
         // Bounding rect
         const rect = polaroid.getBoundingClientRect();
@@ -1212,12 +1229,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Match original rotation
         const transformStyle = polaroid.style.transform || '';
         const match = transformStyle.match(/rotate\(([^)]+)\)/);
-        const rotationVal = match ? match[1] : '0deg';
+        let rotationVal = '0deg';
+        if (match) {
+          rotationVal = match[1];
+        } else if (polaroid.classList.contains('scrapbook-photo-slot')) {
+          rotationVal = '-1.5deg';
+        }
 
         lightbox.style.transition = 'none';
         lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal})`;
 
-        // Hide desk item
+        // Hide desk/book item
         polaroid.style.opacity = '0';
         polaroid.style.pointerEvents = 'none';
 
@@ -1251,7 +1273,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const transformStyle = activePolaroid.style.transform || '';
       const match = transformStyle.match(/rotate\(([^)]+)\)/);
-      const rotationVal = match ? match[1] : '0deg';
+      let rotationVal = '0deg';
+      if (match) {
+        rotationVal = match[1];
+      } else if (activePolaroid.classList.contains('scrapbook-photo-slot')) {
+        rotationVal = '-1.5deg';
+      }
 
       lightbox.style.transition = 'transform 0.55s cubic-bezier(0.55, 0, 0.1, 1)';
       lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal})`;

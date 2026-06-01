@@ -826,6 +826,7 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
   transform: rotate(-1.5deg);
   transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
 .scrapbook-photo-slot:hover {
@@ -2256,6 +2257,7 @@ body {
   color: #2c1d11;
   margin-top: 25px;
   text-align: center;
+  white-space: pre-line;
 }
 
 /* MP3 Player Lightbox Zoom */
