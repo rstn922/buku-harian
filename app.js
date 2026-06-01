@@ -10,22 +10,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnPlayPause = document.getElementById('mp3-play-pause');
   const mp3Status = document.getElementById('mp3-status');
 
+  const btnPlayPauseZoomed = document.getElementById('mp3-play-pause-zoomed');
+  const mp3StatusZoomed = document.getElementById('mp3-status-zoomed');
+
+  function syncMP3UI() {
+    if (isPlaying) {
+      if (btnPlayPause) btnPlayPause.classList.add('playing');
+      if (btnPlayPauseZoomed) btnPlayPauseZoomed.classList.add('playing');
+      if (mp3Status) mp3Status.textContent = 'PLAYING';
+      if (mp3StatusZoomed) mp3StatusZoomed.textContent = 'PLAYING';
+    } else {
+      if (btnPlayPause) btnPlayPause.classList.remove('playing');
+      if (btnPlayPauseZoomed) btnPlayPauseZoomed.classList.remove('playing');
+      if (mp3Status) mp3Status.textContent = 'PAUSED';
+      if (mp3StatusZoomed) mp3StatusZoomed.textContent = 'PAUSED';
+    }
+  }
+
   function playMusic() {
     audio.play().then(() => {
-      if (btnPlayPause) btnPlayPause.classList.add('playing');
-      if (mp3Status) mp3Status.textContent = 'PLAYING';
       isPlaying = true;
+      syncMP3UI();
     }).catch(err => {
       console.log("Autoplay blocked by browser.", err);
-      if (mp3Status) mp3Status.textContent = 'PAUSED';
+      isPlaying = false;
+      syncMP3UI();
     });
   }
 
   function pauseMusic() {
     audio.pause();
-    if (btnPlayPause) btnPlayPause.classList.remove('playing');
-    if (mp3Status) mp3Status.textContent = 'PAUSED';
     isPlaying = false;
+    syncMP3UI();
   }
 
   function togglePlay() {
@@ -38,6 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnPlayPause) {
     btnPlayPause.addEventListener('click', togglePlay);
+  }
+  if (btnPlayPauseZoomed) {
+    btnPlayPauseZoomed.addEventListener('click', togglePlay);
   }
 
   // Fallback: Autoplay on first click if blocked
@@ -1049,6 +1068,319 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateMiniBook();
+  }
+
+  // === 9. STICKY NOTES ZOOM/LIGHTBOX INTERACTION ===
+  function setupStickyNoteInspect(deskNoteId, overlayId, rotationVal) {
+    const deskNote = document.getElementById(deskNoteId);
+    const overlay = document.getElementById(overlayId);
+    if (!deskNote || !overlay) return;
+
+    const lightbox = overlay.querySelector('.sticky-note-lightbox');
+    let isOpen = false;
+    let isClosing = false;
+
+    deskNote.addEventListener('click', (e) => {
+      if (isOpen || isClosing) return;
+      e.stopPropagation();
+
+      isOpen = true;
+      isClosing = false;
+
+      const rect = deskNote.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 320; // normalized to zoomed width
+
+      lightbox.style.transition = 'none';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal}deg)`;
+
+      deskNote.style.opacity = '0';
+      deskNote.style.pointerEvents = 'none';
+      overlay.classList.add('active');
+
+      lightbox.offsetHeight; // force reflow
+
+      lightbox.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.2, 0.5, 1)';
+      lightbox.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target !== overlay && !e.target.classList.contains('sticky-note-lightbox') && e.target.closest('.sticky-note-lightbox')) return;
+
+      if (!isOpen || isClosing) return;
+
+      isClosing = true;
+      isOpen = false;
+
+      const rect = deskNote.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 320;
+
+      lightbox.style.transition = 'transform 0.55s cubic-bezier(0.55, 0, 0.1, 1)';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal}deg)`;
+
+      overlay.classList.remove('active');
+
+      setTimeout(() => {
+        deskNote.style.opacity = '1';
+        deskNote.style.pointerEvents = 'auto';
+        lightbox.style.transition = '';
+        lightbox.style.transform = '';
+        isClosing = false;
+      }, 550);
+    });
+
+    overlay.addEventListener('mousemove', (e) => {
+      if (!isOpen || isClosing) return;
+      const rect = lightbox.getBoundingClientRect();
+      const x = e.clientX - (rect.left + rect.width / 2);
+      const y = e.clientY - (rect.top + rect.height / 2);
+      const tiltX = (y / (window.innerHeight / 2)) * -12;
+      const tiltY = (x / (window.innerWidth / 2)) * 12;
+      lightbox.style.transition = 'transform 0.1s ease-out';
+      lightbox.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03) translateZ(20px)`;
+    });
+
+    overlay.addEventListener('mouseleave', () => {
+      if (!isOpen || isClosing) return;
+      lightbox.style.transition = 'transform 0.4s ease-out';
+      lightbox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  }
+
+  setupStickyNoteInspect('desk-yellow-note', 'yellow-note-overlay', -5);
+  setupStickyNoteInspect('desk-pink-note', 'pink-note-overlay', 4);
+
+
+  // === 10. POLAROID FLOOR PHOTOS ZOOM/INSPECT INTERACTION ===
+  const floorPolaroids = document.querySelectorAll('.floor-polaroid');
+  const polaroidOverlay = document.getElementById('polaroid-overlay');
+
+  if (floorPolaroids.length && polaroidOverlay) {
+    const lightbox = polaroidOverlay.querySelector('.polaroid-lightbox');
+    const zoomedImg = document.getElementById('polaroid-zoomed-img');
+    const zoomedCaption = document.getElementById('polaroid-zoomed-caption');
+    
+    let activePolaroid = null;
+    let isOpen = false;
+    let isClosing = false;
+
+    floorPolaroids.forEach(polaroid => {
+      polaroid.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isOpen || isClosing) return;
+
+        activePolaroid = polaroid;
+        isOpen = true;
+        isClosing = false;
+
+        // Extract photo details
+        const img = polaroid.querySelector('img');
+        const caption = polaroid.querySelector('.fp-caption');
+        zoomedImg.src = img.src;
+        zoomedCaption.textContent = caption.textContent;
+
+        // Bounding rect
+        const rect = polaroid.getBoundingClientRect();
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const centerX = windowWidth / 2;
+        const centerY = windowHeight / 2;
+        const cardCenterX = rect.left + rect.width / 2;
+        const cardCenterY = rect.top + rect.height / 2;
+
+        const translateX = cardCenterX - centerX;
+        const translateY = cardCenterY - centerY;
+        const scale = rect.width / 420; // normalized to polaroid lightbox width
+
+        // Match original rotation
+        const transformStyle = polaroid.style.transform || '';
+        const match = transformStyle.match(/rotate\(([^)]+)\)/);
+        const rotationVal = match ? match[1] : '0deg';
+
+        lightbox.style.transition = 'none';
+        lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal})`;
+
+        // Hide desk item
+        polaroid.style.opacity = '0';
+        polaroid.style.pointerEvents = 'none';
+
+        polaroidOverlay.classList.add('active');
+        lightbox.offsetHeight; // reflow
+
+        lightbox.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.2, 0.5, 1)';
+        lightbox.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+      });
+    });
+
+    polaroidOverlay.addEventListener('click', (e) => {
+      if (e.target !== polaroidOverlay && !e.target.classList.contains('polaroid-lightbox') && e.target.closest('.polaroid-lightbox')) return;
+
+      if (!isOpen || isClosing || !activePolaroid) return;
+
+      isClosing = true;
+      isOpen = false;
+
+      const rect = activePolaroid.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 420;
+
+      const transformStyle = activePolaroid.style.transform || '';
+      const match = transformStyle.match(/rotate\(([^)]+)\)/);
+      const rotationVal = match ? match[1] : '0deg';
+
+      lightbox.style.transition = 'transform 0.55s cubic-bezier(0.55, 0, 0.1, 1)';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal})`;
+
+      polaroidOverlay.classList.remove('active');
+
+      setTimeout(() => {
+        activePolaroid.style.opacity = '1';
+        activePolaroid.style.pointerEvents = 'auto';
+        lightbox.style.transition = '';
+        lightbox.style.transform = '';
+        activePolaroid = null;
+        isClosing = false;
+      }, 550);
+    });
+
+    polaroidOverlay.addEventListener('mousemove', (e) => {
+      if (!isOpen || isClosing) return;
+      const rect = lightbox.getBoundingClientRect();
+      const x = e.clientX - (rect.left + rect.width / 2);
+      const y = e.clientY - (rect.top + rect.height / 2);
+      const tiltX = (y / (window.innerHeight / 2)) * -12;
+      const tiltY = (x / (window.innerWidth / 2)) * 12;
+      lightbox.style.transition = 'transform 0.1s ease-out';
+      lightbox.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03) translateZ(20px)`;
+    });
+
+    polaroidOverlay.addEventListener('mouseleave', () => {
+      if (!isOpen || isClosing) return;
+      lightbox.style.transition = 'transform 0.4s ease-out';
+      lightbox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  }
+
+
+  // === 11. MP3 PLAYER ZOOM/INSPECT INTERACTION ===
+  const deskMp3Player = document.getElementById('mp3-player');
+  const mp3PlayerOverlay = document.getElementById('mp3-player-overlay');
+
+  if (deskMp3Player && mp3PlayerOverlay) {
+    const lightbox = mp3PlayerOverlay.querySelector('.mp3-player-lightbox');
+    let isOpen = false;
+    let isClosing = false;
+
+    deskMp3Player.addEventListener('click', (e) => {
+      // Prevent click when user is clicking the play pause button on desk
+      if (e.target.closest('#mp3-play-pause')) return;
+      if (isOpen || isClosing) return;
+      e.stopPropagation();
+
+      isOpen = true;
+      isClosing = false;
+
+      const rect = deskMp3Player.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 250; // normalized to zoomed mp3 player width (250px)
+
+      lightbox.style.transition = 'none';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(0deg)`;
+
+      deskMp3Player.style.opacity = '0';
+      deskMp3Player.style.pointerEvents = 'none';
+      mp3PlayerOverlay.classList.add('active');
+
+      lightbox.offsetHeight; // reflow
+
+      lightbox.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.2, 0.5, 1)';
+      lightbox.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+    });
+
+    mp3PlayerOverlay.addEventListener('click', (e) => {
+      // Don't close if clicking inside the mp3-player body (especially buttons)
+      if (e.target.closest('.zoomed-mp3-player')) return;
+
+      if (!isOpen || isClosing) return;
+
+      isClosing = true;
+      isOpen = false;
+
+      const rect = deskMp3Player.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 250;
+
+      lightbox.style.transition = 'transform 0.55s cubic-bezier(0.55, 0, 0.1, 1)';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(0deg)`;
+
+      mp3PlayerOverlay.classList.remove('active');
+
+      setTimeout(() => {
+        deskMp3Player.style.opacity = '1';
+        deskMp3Player.style.pointerEvents = 'auto';
+        lightbox.style.transition = '';
+        lightbox.style.transform = '';
+        isClosing = false;
+      }, 550);
+    });
+
+    mp3PlayerOverlay.addEventListener('mousemove', (e) => {
+      if (!isOpen || isClosing) return;
+      const rect = lightbox.getBoundingClientRect();
+      const x = e.clientX - (rect.left + rect.width / 2);
+      const y = e.clientY - (rect.top + rect.height / 2);
+      const tiltX = (y / (window.innerHeight / 2)) * -12;
+      const tiltY = (x / (window.innerWidth / 2)) * 12;
+      lightbox.style.transition = 'transform 0.1s ease-out';
+      lightbox.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03) translateZ(20px)`;
+    });
+
+    mp3PlayerOverlay.addEventListener('mouseleave', () => {
+      if (!isOpen || isClosing) return;
+      lightbox.style.transition = 'transform 0.4s ease-out';
+      lightbox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
   }
 
 });

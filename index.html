@@ -172,11 +172,11 @@
       </div>
 
       <!-- Sticky Notes on the left side of the table -->
-      <div class="sticky-note yellow-note" style="top: 410px; left: 25px; transform: rotate(-5deg);" title="Pesan Piket">
+      <div class="sticky-note yellow-note" id="desk-yellow-note" style="top: 410px; left: 25px; transform: rotate(-5deg);" title="Pesan Piket">
         <div class="sticky-text">Jangan lupa piket air galon!</div>
       </div>
       
-      <div class="sticky-note pink-note" style="top: 530px; left: 20px; transform: rotate(4deg);" title="Pesan Rapat">
+      <div class="sticky-note pink-note" id="desk-pink-note" style="top: 530px; left: 20px; transform: rotate(4deg);" title="Pesan Rapat">
         <div class="sticky-text">Evaluasi rapat malam jam 20.00</div>
       </div>
 
@@ -527,6 +527,49 @@
         <button class="btn-mini-nav" id="btn-mini-next">▶</button>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Fullscreen Yellow Sticky Note Lightbox Overlay -->
+  <div class="sticky-note-overlay" id="yellow-note-overlay">
+    <div class="sticky-note-lightbox yellow-note-zoomed">
+      <div class="sticky-text-zoomed">Jangan lupa piket air galon!</div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Pink Sticky Note Lightbox Overlay -->
+  <div class="sticky-note-overlay" id="pink-note-overlay">
+    <div class="sticky-note-lightbox pink-note-zoomed">
+      <div class="sticky-text-zoomed">Evaluasi rapat malam jam 20.00</div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Polaroid Photo Lightbox Overlay (Dynamic) -->
+  <div class="polaroid-overlay" id="polaroid-overlay">
+    <div class="polaroid-lightbox">
+      <div class="fp-photo-slot-zoomed">
+        <img id="polaroid-zoomed-img" src="" alt="">
+      </div>
+      <div class="fp-caption-zoomed" id="polaroid-zoomed-caption"></div>
+    </div>
+  </div>
+
+  <!-- Fullscreen MP3 Player Lightbox Overlay -->
+  <div class="mp3-player-overlay" id="mp3-player-overlay">
+    <div class="mp3-player-lightbox">
+      <div class="mp3-player zoomed-mp3-player">
+        <div class="mp3-screen">
+          <div class="mp3-status" id="mp3-status-zoomed">PAUSED</div>
+          <div class="mp3-track">EVERYTHING</div>
+        </div>
+        <div class="mp3-wheel">
+          <button class="mp3-center-btn" id="mp3-play-pause-zoomed" title="Putar/Jeda"></button>
+          <div class="mp3-nav-indicator top">▲</div>
+          <div class="mp3-nav-indicator bottom">▼</div>
+          <div class="mp3-nav-indicator left">◀</div>
+          <div class="mp3-nav-indicator right">▶</div>
+        </div>
+      </div>
     </div>
   </div>
 
