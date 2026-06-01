@@ -1170,9 +1170,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === 10. POLAROID FLOOR PHOTOS & SCRAPBOOK PHOTOS ZOOM/INSPECT INTERACTION ===
   const floorPolaroids = document.querySelectorAll('.floor-polaroid, .scrapbook-photo-slot');
+  const floorCamera = document.getElementById('floor-camera');
   const polaroidOverlay = document.getElementById('polaroid-overlay');
 
-  if (floorPolaroids.length && polaroidOverlay) {
+  if ((floorPolaroids.length || floorCamera) && polaroidOverlay) {
     const lightbox = polaroidOverlay.querySelector('.polaroid-lightbox');
     const zoomedImg = document.getElementById('polaroid-zoomed-img');
     const zoomedCaption = document.getElementById('polaroid-zoomed-caption');
@@ -1181,21 +1182,85 @@ document.addEventListener('DOMContentLoaded', () => {
     let isOpen = false;
     let isClosing = false;
 
-    floorPolaroids.forEach(polaroid => {
-      polaroid.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (isOpen || isClosing) return;
+    const cameraPhotos = [
+      "IMG_20250709_115251_770.jpg",
+      "IMG_20250710_123012_068.jpg",
+      "IMG_20250712_122848_313.jpg",
+      "IMG_20250720_163813_229.jpg",
+      "IMG_20250720_163817_605.jpg",
+      "IMG_20250720_163818_651.jpg",
+      "IMG_20250720_163819_670.jpg",
+      "IMG_20250722_213405_490.jpg",
+      "IMG_20250723_172437_9.jpg",
+      "IMG_20250726_115817_8.jpg",
+      "IMG_20250728_114145_541.jpg",
+      "IMG_20250728_122556_691.jpg",
+      "IMG_20250728_124029_623.jpg",
+      "IMG_20250803_173552_5.jpg",
+      "IMG_20250811_211740_980.jpg",
+      "IMG_20250812_222931_282.jpg",
+      "IMG_20250813_153802_359.jpg",
+      "IMG_20250816_215506_213.jpg",
+      "IMG_20250816_215747_763.jpg",
+      "IMG_20250816_221328_773.jpg",
+      "IMG_20250816_221407_482.jpg",
+      "IMG_20250817_224507_5.jpg",
+      "IMG_20251119_120911_509.jpg",
+      "IMG_20251119_120923_193.jpg",
+      "IMG_20251119_121734_908.jpg",
+      "IMG_20251119_121759_164.jpg",
+      "IMG_20251119_121805_452.jpg",
+      "IMG_20251119_121819_113.jpg",
+      "IMG_20251119_121851_975.jpg",
+      "IMG_20251119_121857_118.jpg",
+      "IMG_20260528_030455_905.jpg",
+      "IMG-20250720-WA0010.jpg",
+      "IMG-20250817-WA0162.jpg",
+      "IMG-20250818-WA0020.jpg",
+      "IMG-20250818-WA0520.jpg",
+      "IMG-20251119-WA0069.jpg",
+      "IMG-20251119-WA0071.jpg",
+      "IMG-20251119-WA0074.jpg",
+      "IMG-20251119-WA0075.jpg",
+      "IMG-20251119-WA0079.jpg",
+      "IMG-20251119-WA0122.jpg",
+      "IMG-20251119-WA0124.jpg",
+      "IMG-20251119-WA0126.jpg",
+      "IMG-20251119-WA0128.jpg",
+      "IMG-20251119-WA0130.jpg",
+      "IMG-20251119-WA0132.jpg",
+      "IMG-20251119-WA0134.jpg",
+      "IMG-20251119-WA0136.jpg",
+      "IMG-20251119-WA0138.jpg",
+      "IMG-20251119-WA0140.jpg",
+      "IMG-20251119-WA0142.jpg",
+      "IMG-20251119-WA0144.jpg",
+      "IMG-20251119-WA0146.jpg",
+      "IMG-20251119-WA0148.jpg",
+      "IMG-20251119-WA0150.jpg",
+      "IMG-20251119-WA0152.jpg",
+      "IMG-20251119-WA0154.jpg",
+      "IMG-20251119-WA0156.jpg"
+    ];
 
-        activePolaroid = polaroid;
-        isOpen = true;
-        isClosing = false;
+    const triggerZoom = (polaroid) => {
+      if (isOpen || isClosing) return;
 
+      activePolaroid = polaroid;
+      isOpen = true;
+      isClosing = false;
+
+      let captionText = "";
+      if (polaroid === floorCamera) {
+        const randomPhoto = cameraPhotos[Math.floor(Math.random() * cameraPhotos.length)];
+        zoomedImg.src = `assets/photos/${randomPhoto}`;
+        captionText = "Hasil Foto Polaroid";
+      } else {
         // Extract photo details
         const img = polaroid.querySelector('img');
         zoomedImg.src = img ? img.src : '';
         
-        let captionText = "";
-        const captionEl = polaroid.querySelector('.fp-caption');
+        let captionEl = polaroid.querySelector('.fp-caption');
         if (captionEl) {
           captionText = captionEl.textContent;
         } else {
@@ -1229,65 +1294,81 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         }
-        zoomedCaption.textContent = captionText;
+      }
+      zoomedCaption.textContent = captionText;
 
-        // Reset inline styles
-        zoomedCaption.style.fontSize = '';
-        zoomedCaption.style.lineHeight = '';
-        zoomedCaption.style.marginTop = '';
+      // Reset inline styles
+      zoomedCaption.style.fontSize = '';
+      zoomedCaption.style.lineHeight = '';
+      zoomedCaption.style.marginTop = '';
 
-        // Dynamically shrink font size and spacing for long texts to keep photo size original
-        if (captionText.length > 150) {
-          zoomedCaption.style.fontSize = '0.85rem';
-          zoomedCaption.style.lineHeight = '1.25';
-          zoomedCaption.style.marginTop = '12px';
-        } else if (captionText.length > 80) {
-          zoomedCaption.style.fontSize = '1.05rem';
-          zoomedCaption.style.lineHeight = '1.35';
-          zoomedCaption.style.marginTop = '18px';
-        } else {
-          zoomedCaption.style.fontSize = '1.35rem';
-          zoomedCaption.style.lineHeight = '1.5';
-          zoomedCaption.style.marginTop = '25px';
-        }
+      // Dynamically shrink font size and spacing for long texts to keep photo size original
+      if (captionText.length > 150) {
+        zoomedCaption.style.fontSize = '0.85rem';
+        zoomedCaption.style.lineHeight = '1.25';
+        zoomedCaption.style.marginTop = '12px';
+      } else if (captionText.length > 80) {
+        zoomedCaption.style.fontSize = '1.05rem';
+        zoomedCaption.style.lineHeight = '1.35';
+        zoomedCaption.style.marginTop = '18px';
+      } else {
+        zoomedCaption.style.fontSize = '1.35rem';
+        zoomedCaption.style.lineHeight = '1.5';
+        zoomedCaption.style.marginTop = '25px';
+      }
 
-        // Bounding rect
-        const rect = polaroid.getBoundingClientRect();
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-        const centerX = windowWidth / 2;
-        const centerY = windowHeight / 2;
-        const cardCenterX = rect.left + rect.width / 2;
-        const cardCenterY = rect.top + rect.height / 2;
+      // Bounding rect
+      const rect = polaroid.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
 
-        const translateX = cardCenterX - centerX;
-        const translateY = cardCenterY - centerY;
-        const scale = rect.width / 420; // normalized to polaroid lightbox width
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 420; // normalized to polaroid lightbox width
 
-        // Match original rotation
-        const transformStyle = polaroid.style.transform || '';
-        const match = transformStyle.match(/rotate\(([^)]+)\)/);
-        let rotationVal = '0deg';
-        if (match) {
-          rotationVal = match[1];
-        } else if (polaroid.classList.contains('scrapbook-photo-slot')) {
-          rotationVal = '-1.5deg';
-        }
+      // Match original rotation
+      const transformStyle = polaroid.style.transform || '';
+      const match = transformStyle.match(/rotate\(([^)]+)\)/);
+      let rotationVal = '0deg';
+      if (match) {
+        rotationVal = match[1];
+      } else if (polaroid.id === 'floor-camera') {
+        rotationVal = '15deg';
+      } else if (polaroid.classList.contains('scrapbook-photo-slot')) {
+        rotationVal = '-1.5deg';
+      }
 
-        lightbox.style.transition = 'none';
-        lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal})`;
+      lightbox.style.transition = 'none';
+      lightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotationVal})`;
 
-        // Hide desk/book item
-        polaroid.style.opacity = '0';
-        polaroid.style.pointerEvents = 'none';
+      // Hide desk/book item
+      polaroid.style.opacity = '0';
+      polaroid.style.pointerEvents = 'none';
 
-        polaroidOverlay.classList.add('active');
-        lightbox.offsetHeight; // reflow
+      polaroidOverlay.classList.add('active');
+      lightbox.offsetHeight; // reflow
 
-        lightbox.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.2, 0.5, 1)';
-        lightbox.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+      lightbox.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.2, 0.5, 1)';
+      lightbox.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+    };
+
+    floorPolaroids.forEach(polaroid => {
+      polaroid.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerZoom(polaroid);
       });
     });
+
+    if (floorCamera) {
+      floorCamera.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerZoom(floorCamera);
+      });
+    }
 
     polaroidOverlay.addEventListener('click', (e) => {
       if (e.target !== polaroidOverlay && !e.target.classList.contains('polaroid-lightbox') && e.target.closest('.polaroid-lightbox')) return;
@@ -1314,6 +1395,8 @@ document.addEventListener('DOMContentLoaded', () => {
       let rotationVal = '0deg';
       if (match) {
         rotationVal = match[1];
+      } else if (activePolaroid.id === 'floor-camera') {
+        rotationVal = '15deg';
       } else if (activePolaroid.classList.contains('scrapbook-photo-slot')) {
         rotationVal = '-1.5deg';
       }
