@@ -550,14 +550,14 @@ body {
 /* === MAIN SCRAPBOOK CONTAINER === */
 .book-wrapper {
   position: absolute;
-  left: 260px;
-  top: 115px;
+  left: 310px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 820px;
   height: 520px;
   z-index: 3;
   filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.7));
   transition: transform 0.8s ease-in-out;
-  transform: translate(0, 0);
 }
 
 /* Thick Leather Backing Cover */
@@ -612,10 +612,7 @@ body {
 
 /* Desktop-only: Sliding closed book states */
 @media (min-width: 769px) {
-  /* Closed cover state (sliding book & backing folder to center cover) */
-  .book-wrapper.closed-cover {
-    transform: translate(-205px, 0);
-  }
+  /* Closed cover state (backing folder half-width on the right) */
   .book-wrapper.closed-cover::before {
     width: calc(50% + 6px);
     left: calc(50% - 3px);
@@ -626,10 +623,7 @@ body {
     pointer-events: none;
   }
 
-  /* Closed back cover state (sliding book & backing folder to center back cover) */
-  .book-wrapper.closed-back {
-    transform: translate(205px, 0);
-  }
+  /* Closed back cover state (backing folder half-width on the left) */
   .book-wrapper.closed-back::before {
     width: calc(50% + 6px);
     left: -3px;
@@ -646,7 +640,7 @@ body {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  background-color: #fcfbf9;
+  background-color: transparent;
   border-radius: 8px;
   overflow: visible;
 }
