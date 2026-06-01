@@ -836,5 +836,195 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // === 8. KKN LOGBOOK ZOOM/INSPECT & FLIP INTERACTION (GAME INSPECT STYLE) ===
+  const deskLogbook = document.getElementById('desk-logbook');
+  const logbookOverlay = document.getElementById('logbook-overlay');
+  
+  if (deskLogbook && logbookOverlay) {
+    const logbookLightbox = logbookOverlay.querySelector('.logbook-lightbox');
+    const miniBook = logbookOverlay.querySelector('.mini-book');
+    const miniPages = logbookOverlay.querySelectorAll('.mini-page');
+    const btnMiniPrev = document.getElementById('btn-mini-prev');
+    const btnMiniNext = document.getElementById('btn-mini-next');
+    const miniNavIndicator = document.getElementById('mini-nav-indicator');
+    
+    let currentMiniSpread = 0;
+    const totalMiniSpreads = miniPages.length + 1; // 4 page sheets + 1 = 5 states (0 to 4)
+    const miniSpreadLabels = ["Sampul", "Halaman 1-2", "Halaman 3-4", "Halaman 5-6", "Selesai"];
+    
+    let isClosing = false;
+    let isOpen = false;
+
+    function updateMiniBook() {
+      // Determine if opened or closed (Spread 0 and Spread 4 are closed cover states)
+      if (currentMiniSpread > 0 && currentMiniSpread < totalMiniSpreads - 1) {
+        logbookLightbox.classList.add('opened');
+      } else {
+        logbookLightbox.classList.remove('opened');
+      }
+
+      miniPages.forEach((page, i) => {
+        if (i < currentMiniSpread) {
+          page.classList.add('flipped');
+          page.style.zIndex = i;
+        } else {
+          page.classList.remove('flipped');
+          page.style.zIndex = totalMiniSpreads - i;
+        }
+      });
+
+      if (btnMiniPrev) btnMiniPrev.disabled = (currentMiniSpread === 0);
+      if (btnMiniNext) btnMiniNext.disabled = (currentMiniSpread === totalMiniSpreads - 1);
+      if (miniNavIndicator) miniNavIndicator.textContent = miniSpreadLabels[currentMiniSpread];
+    }
+
+    // Direct click on desk element to inspect
+    deskLogbook.addEventListener('click', (e) => {
+      if (isOpen || isClosing) return;
+      e.stopPropagation();
+      
+      isOpen = true;
+      isClosing = false;
+      currentMiniSpread = 0; // start on cover
+      updateMiniBook();
+      
+      // Calculate screen positions
+      const rect = deskLogbook.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+      
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 280; // normalized to cover width (280px)
+      
+      // Step 1: Place the lightbox exactly over the desk logbook, matches rotation (8deg)
+      logbookLightbox.style.transition = 'none';
+      logbookLightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(8deg)`;
+      
+      // Step 2: Make desk logbook invisible
+      deskLogbook.style.opacity = '0';
+      deskLogbook.style.pointerEvents = 'none';
+      
+      // Step 3: Show the overlay
+      logbookOverlay.classList.add('active');
+      
+      // Trigger browser reflow
+      logbookLightbox.offsetHeight;
+      
+      // Step 4: Fly in to the center
+      logbookLightbox.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.2, 0.5, 1)';
+      logbookLightbox.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+    });
+
+    // Dismiss overlay by clicking around
+    logbookOverlay.addEventListener('click', (e) => {
+      // Prevent closing if clicking buttons, or clicking inside the book
+      if (e.target.closest('.mini-book-nav') || e.target.closest('.mini-book')) return;
+      if (e.target !== logbookOverlay && !e.target.classList.contains('logbook-lightbox') && e.target.closest('.logbook-lightbox')) return;
+      
+      if (!isOpen || isClosing) return;
+      
+      isClosing = true;
+      isOpen = false;
+      
+      // Fly book back to desk
+      const rect = deskLogbook.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const centerX = windowWidth / 2;
+      const centerY = windowHeight / 2;
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+      
+      const translateX = cardCenterX - centerX;
+      const translateY = cardCenterY - centerY;
+      const scale = rect.width / 280;
+      
+      // Close transition (returns book to desk size & angle)
+      logbookLightbox.classList.remove('opened'); // close spreads first
+      logbookLightbox.style.transition = 'transform 0.55s cubic-bezier(0.55, 0, 0.1, 1)';
+      logbookLightbox.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(8deg)`;
+      
+      logbookOverlay.classList.remove('active');
+      
+      setTimeout(() => {
+        deskLogbook.style.opacity = '1';
+        deskLogbook.style.pointerEvents = 'auto';
+        logbookLightbox.style.transition = '';
+        logbookLightbox.style.transform = '';
+        isClosing = false;
+      }, 550);
+    });
+
+    // Click on book left/right halves to turn pages
+    miniBook.addEventListener('click', (e) => {
+      if (isClosing) return;
+      e.stopPropagation();
+      
+      const rect = miniBook.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      
+      if (clickX > rect.width / 2) {
+        if (currentMiniSpread < totalMiniSpreads - 1) {
+          currentMiniSpread++;
+          updateMiniBook();
+        }
+      } else {
+        if (currentMiniSpread > 0) {
+          currentMiniSpread--;
+          updateMiniBook();
+        }
+      }
+    });
+
+    // Navigation buttons
+    if (btnMiniPrev) {
+      btnMiniPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentMiniSpread > 0) {
+          currentMiniSpread--;
+          updateMiniBook();
+        }
+      });
+    }
+
+    if (btnMiniNext) {
+      btnMiniNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentMiniSpread < totalMiniSpreads - 1) {
+          currentMiniSpread++;
+          updateMiniBook();
+        }
+      });
+    }
+
+    // Parallax Tilt on inspect
+    logbookOverlay.addEventListener('mousemove', (e) => {
+      if (!isOpen || isClosing) return;
+      
+      const rect = logbookLightbox.getBoundingClientRect();
+      const x = e.clientX - (rect.left + rect.width / 2);
+      const y = e.clientY - (rect.top + rect.height / 2);
+      
+      const tiltX = (y / (window.innerHeight / 2)) * -12;
+      const tiltY = (x / (window.innerWidth / 2)) * 12;
+      
+      logbookLightbox.style.transition = 'transform 0.1s ease-out';
+      logbookLightbox.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03) translateZ(20px)`;
+    });
+
+    logbookOverlay.addEventListener('mouseleave', () => {
+      if (!isOpen || isClosing) return;
+      logbookLightbox.style.transition = 'transform 0.4s ease-out';
+      logbookLightbox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+
+    updateMiniBook();
+  }
+
 });
 

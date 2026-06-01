@@ -151,7 +151,7 @@
       <div class="desk-mat"></div>
 
       <!-- KKN Logbook on the left -->
-      <div class="desk-logbook" title="Buku Laporan/Logbook KKN">
+      <div class="desk-logbook" id="desk-logbook" title="Buku Laporan/Logbook KKN">
         <div class="logbook-cover">
           <div class="logbook-label">LOGBOOK KKN</div>
           <div class="logbook-sub">Desa Kenangan</div>
@@ -429,6 +429,104 @@
       </div>
       <div class="id-name-zoomed">RISTIN TRI PUTRI DAELI</div>
       <div class="id-role-zoomed">BENDAHARA II</div>
+    </div>
+  </div>
+
+  <!-- Fullscreen KKN Logbook Lightbox Overlay -->
+  <div class="logbook-overlay" id="logbook-overlay">
+    <div class="logbook-lightbox" id="logbook-lightbox">
+      <!-- 3D Mini Book -->
+      <div class="mini-book" id="mini-book">
+        
+        <!-- COVER PAGE (Page 0) -->
+        <div class="mini-page mini-cover" id="mini-page-0">
+          <div class="mini-front">
+            <div class="mini-cover-design">
+              <div class="mini-badge">📜</div>
+              <h2 class="mini-title">LOGBOOK KKN</h2>
+              <p class="mini-subtitle">Desa Kenangan</p>
+              <p class="mini-prompt">Klik untuk Membuka ➔</p>
+            </div>
+          </div>
+          <div class="mini-back">
+            <!-- Page 1 (Left Page of Spread 1) -->
+            <div class="mini-page-content">
+              <h4 class="mini-page-header">Prolog</h4>
+              <p class="mini-handwritten-text">Desa ini mengajari kita tentang hal sederhana yang bermakna. Langkah kecil yang kita jalani bersama, menjadi barisan baris rindu.</p>
+              <span class="mini-page-number">1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPREAD 1 (Page 2 & 3) -->
+        <div class="mini-page" id="mini-page-1">
+          <div class="mini-front">
+            <!-- Page 2 (Right Page of Spread 1) -->
+            <div class="mini-page-content">
+              <h4 class="mini-page-header">Malam di Posko</h4>
+              <p class="mini-handwritten-text">Kopi hangat dan tawa renyah,<br>Mengusir dingin malam yang sunyi.<br>Di bawah atap posko sederhana,<br>Kita rajut cerita yang takkan mati.</p>
+              <span class="mini-page-number">2</span>
+            </div>
+          </div>
+          <div class="mini-back">
+            <!-- Page 3 (Left Page of Spread 2) -->
+            <div class="mini-page-content">
+              <h4 class="mini-page-header">Jalan Desa</h4>
+              <p class="mini-handwritten-text">Debu jalanan desa menerpa,<br>Terik matahari membakar kulit.<br>Namun senyum anak-anak menyambut,<br>Hilangkan lelah yang sempat menghimpit.</p>
+              <span class="mini-page-number">3</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPREAD 2 (Page 4 & 5) -->
+        <div class="mini-page" id="mini-page-2">
+          <div class="mini-front">
+            <!-- Page 4 (Right Page of Spread 2) -->
+            <div class="mini-page-content">
+              <h4 class="mini-page-header">Batas Waktu</h4>
+              <p class="mini-handwritten-text">Hari berlalu tak terasa,<br>Saat perpisahan mulai membayang.<br>Setiap sudut menyimpan kisah,<br>Tentang kebersamaan yang kita sayang.</p>
+              <span class="mini-page-number">4</span>
+            </div>
+          </div>
+          <div class="mini-back">
+            <!-- Page 5 (Left Page of Spread 3) -->
+            <div class="mini-page-content">
+              <h4 class="mini-page-header">Kenangan Abadi</h4>
+              <p class="mini-handwritten-text">Kini kita telah kembali,<br>Ke jalan masing-masing terpencar.<br>Namun logbook ini tetap bersaksi,<br>Kenangan posko takkan pudar.</p>
+              <span class="mini-page-number">5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BACK COVER (Page 6) -->
+        <div class="mini-page mini-back-cover" id="mini-page-3">
+          <div class="mini-front">
+            <!-- Page 6 (Inside Back Cover - Right Page of Spread 3) -->
+            <div class="mini-page-content mini-end-page">
+              <h4 class="mini-page-header">Catatan Akhir</h4>
+              <p class="mini-handwritten-text">Ditulis dengan rindu dan kenangan hangat dari KKN Desa Kenangan.</p>
+              <div class="mini-doodle">🌸</div>
+              <span class="mini-page-number">6</span>
+            </div>
+          </div>
+          <div class="mini-back">
+            <!-- Outer Back Cover -->
+            <div class="mini-cover-design mini-back-cover-design">
+              <p class="mini-end-title">Terima Kasih</p>
+              <p class="mini-end-sub">KKN UNIMED 2026</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation for Mini Book -->
+      <div class="mini-book-nav">
+        <button class="btn-mini-nav" id="btn-mini-prev">◀</button>
+        <span class="mini-nav-indicator" id="mini-nav-indicator">Sampul</span>
+        <button class="btn-mini-nav" id="btn-mini-next">▶</button>
+      </div>
+
     </div>
   </div>
 
